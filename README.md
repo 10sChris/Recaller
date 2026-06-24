@@ -1,5 +1,15 @@
 ## README file
 
-Use View > Panels > Join with Closest to make one panel.
+# Big Heading
+## Smaller Heading
 
-Click "VS Code" in the top menu bar to open VS Code.
+This is a paragraph of normal text.
+
+**bold text**
+*italic text*
+
+- bullet point
+- another bullet
+
+1. numbered item
+2. numbered item
