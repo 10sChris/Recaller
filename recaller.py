@@ -1,17 +1,19 @@
 import requests
 import pandas as pd
 import sqlalchemy as db
-
+import os
 
 from google import genai
 
-client = genai.Client()
+my_api_key = os.getenv('GENAI_KEY')
+
+client = genai.Client(api_key=my_api_key)
 
 url = "https://api.fda.gov/food/enforcement.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
 
-def check_food(food):
+def check_food(food, summarize=True):
 
   response = requests.get(url, params={"search": f"product_description:{food}", "limit": 1})
   food_status = response.json()
@@ -32,8 +34,6 @@ def check_food(food):
 
   food_statistics = pd.DataFrame.from_dict(food_stats)
 
-  print(food_statistics)
-
   with engine.connect() as connection:
     connection.execute(db.text("""
         CREATE TABLE IF NOT EXISTS food_status (
@@ -49,11 +49,15 @@ def check_food(food):
   
   food_statistics.to_sql('food_status', con=engine, if_exists='append', index=False)
 
-  summary = summarize_recall(item)
+  if summarize:
+    summary = summarize_recall(item)
+    print("\nGemini safety summary:")
+    print(summary)
 
-  print("\nGemini safety summary:")
-
-  print(summary)
+def show_db():
+  with engine.connect() as connection:
+    query_result = connection.execute(db.text("SELECT rowid, * FROM food_status")).fetchall()
+  print(pd.DataFrame(query_result))
 
 def update_db():
   with engine.connect() as connection:
@@ -62,11 +66,13 @@ def update_db():
   foods = [row[0] for row in query_result]
 
   for food in foods:
-    check_food(food)
+    check_food(food, summarize=False)
+  
+  show_db()
 
-def delete_food(food):
+def delete_food(row_num):
   with engine.connect() as connection:
-    connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"), {"food": food})
+    connection.execute(db.text("DELETE FROM food_status WHERE rowid = :row"), {"row": row_num})
     connection.commit()
   
 
@@ -86,6 +92,3 @@ def summarize_recall(item):
   print("finished")
 
   return resp.output_text
-  
-food = input("Enter a food: ")
-check_food(food)
