@@ -35,14 +35,6 @@ def check_food(food, summarize=True):
   food_statistics = pd.DataFrame.from_dict(food_stats)
 
   with engine.connect() as connection:
-    connection.execute(db.text("""
-        CREATE TABLE IF NOT EXISTS food_status (
-            Food TEXT,
-            "Reason for recall" TEXT,
-            "Recall date" TEXT,
-            Status TEXT
-        )
-    """))
 
     connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"), {"food": item.get("product_description", "N/A")})
     connection.commit()
