@@ -15,8 +15,9 @@ engine = db.create_engine('sqlite:///food_status.db')
 
 def check_food(food, summarize=True):
 
-  response = requests.get(url, 
+  response = requests.get(url,
   params={"search": f"product_description:{food}", "limit": 1})
+
   food_status = response.json()
 
   if "results" not in food_status:
@@ -24,7 +25,6 @@ def check_food(food, summarize=True):
     print("\n")
     print("No results. Try something else.")
     return None
-  
 
   item = food_status["results"][0]
 
@@ -41,7 +41,8 @@ def check_food(food, summarize=True):
 
   with engine.connect() as connection:
 
-    connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"), {"food": item.get("product_description", "N/A")})
+    connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"), 
+    {"food": item.get("product_description", "N/A")})
     connection.commit()
   
   food_statistics.to_sql('food_status', con=engine, if_exists='append', index=False)
@@ -50,6 +51,7 @@ def check_food(food, summarize=True):
     summary = summarize_recall(item)
     print("\nGemini safety summary:")
     print(summary)
+
 
 def show_db():
   with engine.connect() as connection:
