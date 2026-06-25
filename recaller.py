@@ -78,7 +78,8 @@ def update_db():
 def delete_food(row_num):
     with engine.connect() as connection:
         connection.execute(
-            db.text("DELETE FROM food_status WHERE rowid = :row"), {"row": row_num})
+            db.text("DELETE FROM food_status WHERE rowid = :row"),
+            {"row": row_num})
         connection.commit()
 
 
