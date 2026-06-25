@@ -13,14 +13,19 @@ url = "https://api.fda.gov/food/enforcement.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
 
+
 def check_food(food, summarize=True):
 
   response = requests.get(url, params={"search": f"product_description:{food}", "limit": 1})
   food_status = response.json()
 
   if "results" not in food_status:
+
+    print("\n")
+    print("No results. Try something else.")
     return None
   
+
   item = food_status["results"][0]
 
   food_stats = []
