@@ -13,10 +13,10 @@ url = "https://api.fda.gov/food/enforcement.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
 
-
 def check_food(food, summarize=True):
 
-  response = requests.get(url, params={"search": f"product_description:{food}", "limit": 1})
+  response = requests.get(url, 
+  params={"search": f"product_description:{food}", "limit": 1})
   food_status = response.json()
 
   if "results" not in food_status:
@@ -73,7 +73,7 @@ def delete_food(row_num):
     connection.commit()
   
 
-def summarize_recall(item): 
+def summarize_recall(item):
   prompt = f""" 
   Explain this food recall straightforward. 
   Product: {item.get("product_description", "N/A")}

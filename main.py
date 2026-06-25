@@ -1,8 +1,9 @@
 import recaller
 
+
 def main():
   while True:
-    
+
     print("\n")
     print("Type 1 to check a food that has been recalled")
     print("Type 2 to show your data base")
@@ -14,6 +15,7 @@ def main():
     if command == "1":
       food = input("Enter a food: ")
       recaller.check_food(food)
+
     elif command == "2":
       recaller.show_db()
     elif command == "3":
@@ -23,5 +25,6 @@ def main():
       recaller.delete_food(food)
     else:
       print("Invalid command")
+
 
 main()
