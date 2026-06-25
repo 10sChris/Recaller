@@ -5,6 +5,7 @@ import os
 
 from google import genai
 
+
 my_api_key = os.getenv('GENAI_KEY')
 
 client = genai.Client(api_key=my_api_key)
@@ -61,20 +62,12 @@ def show_db():
     with engine.connect() as connection:
         query_result = connection.execute(
             db.text("SELECT rowid, * FROM food_status")).fetchall()
-    print(pd.DataFrame(query_result))
-
-
-def update_db():
-    with engine.connect() as connection:
-        query_result = connection.execute(
-            db.text("SELECT Food FROM food_status;")).fetchall()
-
-    foods = [row[0] for row in query_result]
-
-    for food in foods:
-        check_food(food, summarize=False)
-
-    show_db()
+    for row in query_result:
+        print(f"\nROW ID: {row[0]}")
+        print(f"Food: {row[1]}")
+        print(f"Reason for recall: {row[2]}")
+        print(f"Recall date: {row[3]}")
+        print(f"Status: {row[4]}")
 
 
 def delete_food(row_num):
