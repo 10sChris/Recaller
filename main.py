@@ -3,7 +3,7 @@ import recaller
 
 def main():
     while True:
-      
+
         print("\n")
         print("Type 1 to check a food that has been recalled")
         print("Type 2 to show your data base")

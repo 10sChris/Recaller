@@ -16,8 +16,8 @@ engine = db.create_engine('sqlite:///food_status.db')
 def check_food(food, summarize=True):
 
   response = requests.get(url,
-                      params={"search": 
-                      f"product_description:{food}", "limit": 1})
+                          params={"search":
+                                  f"product_description:{food}", "limit": 1})
 
   food_status = response.json()
 
