@@ -16,7 +16,8 @@ engine = db.create_engine('sqlite:///food_status.db')
 def check_food(food, summarize=True):
 
   response = requests.get(url,
-    params={"search": f"product_description:{food}", "limit": 1})
+                      params={"search": 
+                      f"product_description:{food}", "limit": 1})
 
   food_status = response.json()
 
@@ -45,7 +46,7 @@ def check_food(food, summarize=True):
     {"food": item.get("product_description", "N/A")})
     connection.commit()
 
-  food_statistics.to_sql('food_status', con=engine, 
+  food_statistics.to_sql('food_status', con=engine,
   if_exists='append', index=False)
 
   if summarize:
@@ -65,7 +66,7 @@ def update_db():
   with engine.connect() as connection:
     query_result = connection.execute(
       db.text("SELECT Food FROM food_status;")).fetchall()
-  
+
   foods = [row[0] for row in query_result]
 
   for food in foods:

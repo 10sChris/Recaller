@@ -3,7 +3,7 @@ import recaller
 
 def main():
     while True:
-
+      
         print("\n")
         print("Type 1 to check a food that has been recalled")
         print("Type 2 to show your data base")
@@ -13,18 +13,18 @@ def main():
         print("\n")
         command = input("Enter a command: ")
         if command == "1":
-          food = input("Enter a food: ")
-          recaller.check_food(food)
+            food = input("Enter a food: ")
+            recaller.check_food(food)
 
         elif command == "2":
-          recaller.show_db()
+            recaller.show_db()
         elif command == "3":
-          recaller.update_db()
+            recaller.update_db()
         elif command == "4":
-          food = input("Enter the food you want to delete via rowid: ")
-          recaller.delete_food(food)
+            food = input("Enter the food you want to delete via rowid: ")
+            recaller.delete_food(food)
         else:
-          print("Invalid command")
+            print("Invalid command")
 
 
 main()
