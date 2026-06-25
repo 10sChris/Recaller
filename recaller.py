@@ -17,7 +17,8 @@ def check_food(food, summarize=True):
 
     response = requests.get(url,
                             params={"search":
-                                    f"product_description:{food}", "limit": 1})
+                                    f"product_description:{food}",
+                                    "limit": 1})
 
     food_status = response.json()
 
@@ -42,7 +43,8 @@ def check_food(food, summarize=True):
 
     with engine.connect() as connection:
 
-        connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"),
+        connection.execute(db.text
+                           ("DELETE FROM food_status WHERE Food = :food"),
                            {"food": item.get("product_description", "N/A")})
         connection.commit()
 
