@@ -16,7 +16,7 @@ engine = db.create_engine('sqlite:///food_status.db')
 def check_food(food, summarize=True):
 
   response = requests.get(url,
-  params={"search": f"product_description:{food}", "limit": 1})
+    params={"search": f"product_description:{food}", "limit": 1})
 
   food_status = response.json()
 
@@ -41,11 +41,12 @@ def check_food(food, summarize=True):
 
   with engine.connect() as connection:
 
-    connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"), 
+    connection.execute(db.text("DELETE FROM food_status WHERE Food = :food"),
     {"food": item.get("product_description", "N/A")})
     connection.commit()
-  
-  food_statistics.to_sql('food_status', con=engine, if_exists='append', index=False)
+
+  food_statistics.to_sql('food_status', con=engine, 
+  if_exists='append', index=False)
 
   if summarize:
     summary = summarize_recall(item)
@@ -55,12 +56,15 @@ def check_food(food, summarize=True):
 
 def show_db():
   with engine.connect() as connection:
-    query_result = connection.execute(db.text("SELECT rowid, * FROM food_status")).fetchall()
+    query_result = connection.execute(
+      db.text("SELECT rowid, * FROM food_status")).fetchall()
   print(pd.DataFrame(query_result))
+
 
 def update_db():
   with engine.connect() as connection:
-    query_result = connection.execute(db.text("SELECT Food FROM food_status;")).fetchall()
+    query_result = connection.execute(
+      db.text("SELECT Food FROM food_status;")).fetchall()
   
   foods = [row[0] for row in query_result]
 
@@ -69,9 +73,11 @@ def update_db():
   
   show_db()
 
+
 def delete_food(row_num):
   with engine.connect() as connection:
-    connection.execute(db.text("DELETE FROM food_status WHERE rowid = :row"), {"row": row_num})
+    connection.execute(
+      db.text("DELETE FROM food_status WHERE rowid = :row"), {"row": row_num})
     connection.commit()
   
 
