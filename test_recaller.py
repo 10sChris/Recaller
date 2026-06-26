@@ -3,7 +3,7 @@ import unittest
 
 os.environ["GENAI_KEY"] = "fake-key"
 
-import recaller
+import recaller    # noqa: E402
 
 
 # unit test function
