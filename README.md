@@ -1,15 +1,15 @@
-## README file
+# Recaller
 
-# Big Heading
-## Smaller Heading
+FDA database checker for recalls with advanced summaries
 
-This is a paragraph of normal text.
+# Features
 
-**bold text**
-*italic text*
+- Searches for foods by name or brand
+- Able to view all searches in a database
+- Gen AI summary
+- Able to show database whenever
+- Delete data from database
 
-- bullet point
-- another bullet
+# How to use
 
-1. numbered item
-2. numbered item
+- run "python main.py" and the instructions are given
