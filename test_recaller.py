@@ -1,15 +1,13 @@
+import os
 import unittest
-import os 
 
-os.environ["GENAI_KEY"] = "fake-key" 
+os.environ["GENAI_KEY"] = "fake-key"
 
 import recaller
 
+
 # unit test function
 class TestRecaller(unittest.TestCase):
-
- 
-
     # Checking no results
     def test_check_food_no_results(self):
         res = recaller.check_food("chicken", summarize=False)
@@ -21,7 +19,6 @@ class TestRecaller(unittest.TestCase):
         res = recaller.delete_food(1)
 
         self.assertIsNone(res)
-
 
     # check random food
     def test_check_food_random_food(self):
