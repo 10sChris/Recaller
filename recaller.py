@@ -10,16 +10,18 @@ my_api_key = os.getenv('GENAI_KEY')
 
 client = genai.Client(api_key=my_api_key)
 
-url = "https://api.fda.gov/food/enforcement.json"
+foodurl = "https://api.fda.gov/food/enforcement.json"
+drugurl = "https://api.fda.gov/drug/event.json"
+cosmeticurl = "https://api.fda.gov/cosmetic/event.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
 
 def check_food(food, summarize=True):
 
-    response = requests.get(url,
+    response = requests.get(foodurl,
                             params={"search":
                                     f"product_description:{food}",
-                                    "limit": 1})
+                                    "limit": 5})
 
     food_status = response.json()
 
@@ -29,7 +31,9 @@ def check_food(food, summarize=True):
         print("No results. Try something else.")
         return None
 
-    item = food_status["results"][0]
+    items = food_status["results"]
+
+
 
     food_stats = []
 
@@ -53,8 +57,92 @@ def check_food(food, summarize=True):
                            if_exists='append', index=False)
 
     if summarize:
-        summary = summarize_recall(item)
+        summary = summarize_food_and_drug(item)
         print("\nGemini safety summary:")
+        print(summary)
+
+def check_drug(drug, summarize=True):
+
+    response = requests.get(drugurl,
+                            params={"search":
+                                    f"product_description:{drug}",
+                                    "limit": 5})
+
+    drug_status = response.json()
+
+    if "results" not in drug_status:
+
+        print("\n")
+        print("No results. Try something else.")
+        return None
+
+    items = drug_status["results"]
+
+    drug_stats = []
+
+    drug_stats.append({
+        "Drug": item.get("product_description", "N/A"),
+        "Reason for recall": item.get("reason_for_recall", "N/A"),
+        "Recall date": item.get("recall_initiation_date", "N/A"),
+        "Status": item.get("status", "N/A")
+    })
+
+    drug_statistics = pd.DataFrame.from_dict(drug_stats)
+
+    with engine.connect() as connection:
+
+        connection.execute(db.text
+                           ("DELETE FROM drug_status WHERE Drug = :drug"),
+                           {"drug": item.get("product_description", "N/A")})
+        connection.commit()
+
+    drug_statistics.to_sql('drug_status', con=engine,
+                           if_exists='append', index=False)
+
+    if summarize:
+        summary = summarize_food_and_drug(item)
+        print(summary)
+
+  def check_cosmetic(cosmetic, summarize=True):
+
+    response = requests.get(cosmeticurl,
+                            params={"search":
+                                    f"product_description:{drug}",
+                                    "limit": 1})
+
+    cosmetic_status = response.json()
+
+    if "results" not in cosmetic_status:
+
+        print("\n")
+        print("No results. Try something else.")
+        return None
+
+    item = cosmetic_status["results"][0]
+
+    cosmetic_stats = []
+
+    cosmetic_stats.append({
+        "Cosmetic": item.get("product_description", "N/A"),
+        "Reason for recall": item.get("reason_for_recall", "N/A"),
+        "Recall date": item.get("recall_initiation_date", "N/A"),
+        "Status": item.get("status", "N/A")
+    })
+
+    cosmetic_statistics = pd.DataFrame.from_dict(drug_stats)
+
+    with engine.connect() as connection:
+
+        connection.execute(db.text
+                           ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
+                           {"drug": item.get("product_description", "N/A")})
+        connection.commit()
+
+    cosmetic_statistics.to_sql('cosmetic_status', con=engine,
+                           if_exists='append', index=False)
+
+    if summarize:
+        summary = summarize_cosmetic(item)
         print(summary)
 
 
@@ -78,19 +166,35 @@ def delete_food(row_num):
         connection.commit()
 
 
-def summarize_recall(item):
+def summarize_food_and_drug(item):
     prompt = f"""
-  Explain this food recall straightforward.
+  Explain this food recall straightforward in a sentence or two. 
+  Then give a couple sentences to recommend an alternative item that is safer.
   Product: {item.get("product_description", "N/A")}
   Reason: {item.get("reason_for_recall", "N/A")}
   """
 
-    print("contacting ")
     resp = client.interactions.create(
         model="gemini-2.5-flash",
         input=prompt
     )
 
-    print("finished")
+def summarize_cosmetic(item):
+  products = item.get("products", [])
+  product_name = products[0].get("product_name", "N/A")
+  reactions = item.get("reactions", [])
+  reaction_text = ", ".join(reactions)
+    prompt = f"""
+  Explain this cosmetic recall straightforward in a sentence or two.
+  Then give a couple sentences to recommend an alternative item that is safer.
+  Product: {product_name}
+  Reason: {reaction_text}
+  """
+
+    resp = client.interactions.create(
+        model="gemini-2.5-flash",
+        input=prompt
+    )
+
 
     return resp.output_text
