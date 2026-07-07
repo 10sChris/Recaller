@@ -11,12 +11,12 @@ my_api_key = os.getenv('GENAI_KEY')
 client = genai.Client(api_key=my_api_key)
 
 foodurl = "https://api.fda.gov/food/enforcement.json"
-drugurl = "https://api.fda.gov/drug/event.json"
+drugurl = "https://api.fda.gov/drug/enforecement.json"
 cosmeticurl = "https://api.fda.gov/cosmetic/event.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
 
-def check_food(food, summarize=True):
+def search_food(food):
 
     response = requests.get(foodurl,
                             params={"search":
@@ -26,68 +26,69 @@ def check_food(food, summarize=True):
     food_status = response.json()
 
     if "results" not in food_status:
-
-        print("\n")
-        print("No results. Try something else.")
         return None
 
     items = food_status["results"]
 
+    results = []
 
+    for item in items:
+      results.append({
+          "Food": item.get("product_description", "N/A"),
+          "Reason for recall": item.get("reason_for_recall", "N/A"),
+          "Recall date": item.get("recall_initiation_date", "N/A"),
+          "Status": item.get("status", "N/A")
+      })
+    
+    return results
 
-    food_stats = []
+def select_food(food_item, summarize=True)
 
-    food_stats.append({
-        "Food": item.get("product_description", "N/A"),
-        "Reason for recall": item.get("reason_for_recall", "N/A"),
-        "Recall date": item.get("recall_initiation_date", "N/A"),
-        "Status": item.get("status", "N/A")
-    })
-
-    food_statistics = pd.DataFrame.from_dict(food_stats)
+    food_stats = pd.DataFrame([food_item])
 
     with engine.connect() as connection:
 
         connection.execute(db.text
-                           ("DELETE FROM food_status WHERE Food = :food"),
-                           {"food": item.get("product_description", "N/A")})
+                            ("DELETE FROM food_status WHERE Food = :food"),
+                            {"food": item.get("product_description", "N/A")})
         connection.commit()
 
-    food_statistics.to_sql('food_status', con=engine,
-                           if_exists='append', index=False)
+    food_stats.to_sql('food_status', con=engine,
+                            if_exists='append', index=False)
 
     if summarize:
-        summary = summarize_food_and_drug(item)
-        print("\nGemini safety summary:")
+        summary = summarize_food_and_drug(food_item)
         print(summary)
 
-def check_drug(drug, summarize=True):
+def search_drug(drug):
 
     response = requests.get(drugurl,
                             params={"search":
-                                    f"product_description:{drug}",
+                                    f"product_description",
                                     "limit": 5})
 
     drug_status = response.json()
 
     if "results" not in drug_status:
-
-        print("\n")
-        print("No results. Try something else.")
         return None
 
     items = drug_status["results"]
 
-    drug_stats = []
+    results = []
 
-    drug_stats.append({
-        "Drug": item.get("product_description", "N/A"),
-        "Reason for recall": item.get("reason_for_recall", "N/A"),
-        "Recall date": item.get("recall_initiation_date", "N/A"),
-        "Status": item.get("status", "N/A")
-    })
+    for item in items:
+      results.append({
+          "Drug": item.get("product_description", "N/A"),
+          "Reason for recall": item.get("reason_for_recall", "N/A"),
+          "Recall date": item.get("recall_initiation_date", "N/A"),
+          "Status": item.get("status", "N/A")
+      })
 
-    drug_statistics = pd.DataFrame.from_dict(drug_stats)
+    return results
+
+def select_drug(drug_item, summarize=True)
+
+    drug_stats = pd.DataFrame([drug_item])
 
     with engine.connect() as connection:
 
@@ -96,49 +97,55 @@ def check_drug(drug, summarize=True):
                            {"drug": item.get("product_description", "N/A")})
         connection.commit()
 
-    drug_statistics.to_sql('drug_status', con=engine,
+    drug_stats.to_sql('drug_status', con=engine,
                            if_exists='append', index=False)
 
     if summarize:
         summary = summarize_food_and_drug(item)
         print(summary)
 
-  def check_cosmetic(cosmetic, summarize=True):
+  def search_cosmetics(cosmetic):
 
     response = requests.get(cosmeticurl,
                             params={"search":
-                                    f"product_description:{drug}",
-                                    "limit": 1})
+                                    f"producst.product_name:{cosmetic}",
+                                    "limit": 5})
 
     cosmetic_status = response.json()
 
     if "results" not in cosmetic_status:
-
-        print("\n")
-        print("No results. Try something else.")
         return None
 
-    item = cosmetic_status["results"][0]
+    item = cosmetic_status["results"]
 
-    cosmetic_stats = []
+    results = []
 
-    cosmetic_stats.append({
-        "Cosmetic": item.get("product_description", "N/A"),
-        "Reason for recall": item.get("reason_for_recall", "N/A"),
-        "Recall date": item.get("recall_initiation_date", "N/A"),
-        "Status": item.get("status", "N/A")
-    })
+    for item in items:
+      products = item.get("products", [{}])
+      product_name = products[0].get("product_name", "N/A")
+      reactions = item.get("reactions", [])
+      reaction_text = ", ".join(reactions)
 
-    cosmetic_statistics = pd.DataFrame.from_dict(drug_stats)
+      results.append({
+          "Cosmetic": product_name
+          "Reactions": reaction_text
+          "Report date": item.get("event_date", "N/A")
+      })
+
+    return results
+
+def select_cosmetics(cosmetic_item, summarize=True)
+
+    cosmetic_stats = pd.DataFrame([cosmetic_item])
 
     with engine.connect() as connection:
 
         connection.execute(db.text
                            ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
-                           {"drug": item.get("product_description", "N/A")})
+                           {"cosmetic": cosmetic_item["Cosmetic"]})
         connection.commit()
 
-    cosmetic_statistics.to_sql('cosmetic_status', con=engine,
+    cosmetic_stats.to_sql('cosmetic_status', con=engine,
                            if_exists='append', index=False)
 
     if summarize:
@@ -185,7 +192,7 @@ def summarize_cosmetic(item):
   reactions = item.get("reactions", [])
   reaction_text = ", ".join(reactions)
     prompt = f"""
-  Explain this cosmetic recall straightforward in a sentence or two.
+  Explain the reaction straightforward.
   Then give a couple sentences to recommend an alternative item that is safer.
   Product: {product_name}
   Reason: {reaction_text}
