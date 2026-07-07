@@ -4,6 +4,8 @@ from flask_behind_proxy import FlaskBehindProxy
 import git
 from flask_sqlalchemy import SQLAlchemy
 
+homeText = "Welcome to the Food Recall App where you can find out different info regarding Food, Drugs and Cosmetics."
+
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = 'c29bcfa698752666def85f68880d22d8'
@@ -27,7 +29,7 @@ with app.app_context():
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', subtitle='Home Page', text='This is the home page')
+    return render_template('home.html', subtitle='Home Page', text=homeText)
 
 @app.route("/food")
 def food():
