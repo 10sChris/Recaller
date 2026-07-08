@@ -159,39 +159,58 @@ body {
     background-color: white;
   }
 
-/*Bottom half of page styling*/
-  .popular-section {
-    background: 
-      linear-gradient(
-        to bottom,
-        rgba(14, 165, 233,.20),
-        white 35%
-      );
-    padding: 80px 0;
-  }
+/*Slideshow styling*/
 
-  .popular-section .center-text {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 35px;
-  }
+.popular-section {
+  background: linear-gradient(to bottom, rgba(14, 165, 233, 0.18), #f8fafc 35%, #ffffff 100%);
+  padding: 80px 0;
+}
 
-  .popular-section .carousel {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+.section-title {
+  text-align: center;
+  margin-bottom: 35px;
+}
 
-  .popular-section .carousel-item img{
-    width: 100%;
-    height: 500px;
-    object-fit: contain;
-    background: transparent;
-  }
+.section-title h2 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
 
-  .popular-section .carousel-control-prev-icon,
-  .popular-section .carousel-control-next-icon {
-    background-color: rgba(37, 99, 235, 0.95);
-    border-radius: 50%;
-    padding: 24px;
-  }
+.section-title p {
+  color: #64748b;
+  font-size: 1.05rem;
+}
+
+.minimal-carousel .carousel-inner {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.minimal-carousel .carousel-item img {
+  height: 430px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.minimal-carousel .carousel-control-prev,
+.minimal-carousel .carousel-control-next {
+  width: 12%
+}
+
+.minimal-carousel .carousel-control-prev-icon,
+.minimal-carousel .carousel-control-next-icon {
+  background-color: rgba(2, 132, 199, 0.9);
+  border-radius: 50%;
+  padding: 18px;
+}
+
+.minimal-carousel .carousel-indicators {
+  bottom: -50px;
+}
+
+.minimal-carousel .carousel-indicators button {
+  background-color: #0284c7;
+}
+ 
