@@ -29,46 +29,4 @@
         </div>
     </div>
 </section>
-
-<!-- Olds html design -->
-    <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
-    
-    <div class="p-4 mb-4 bg-light rounded-3 shadow-sm">
-        <h1>FDA Recaller</h1>
-        <p class="lead">
-            Find food, drug, and cosmetic recalls in one simple place.
-        </p>
-        <a href="/food" class="btn btn-primary">View Food Recalls</a>
-        <a href="/drugs" class="btn btn-primary">View Drug Recalls</a>
-        <a href="/cosmetics" class="btn btn-primary">View Cosmetic Recalls</a>
-    </div>
-
-    <h2 class="center-text"> Popular brands </h2>
-
-    <div id="homeSlideshow" class="carousel slide" data-bs-ride="carousel">
-
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" class="d-block w-100" alt="Slide 1">
-            </div>
-    
-            <div class="carousel-item">
-                <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" class="d-block w-100" alt="Slide 2">
-            </div>
-    
-            <div class="carousel-item">
-                <img src="{{ url_for('static', filename='images/slide3.jpg') }}" class="d-block w-100" alt="Slide 3">
-            </div>
-        </div>
-    
-        <button class="carousel-control-prev" type="button" data-bs-target="#homeSlideshow" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-    
-        <button class="carousel-control-next" type="button" data-bs-target="#homeSlideshow" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-    
-    </div>
 {% endblock content %}
