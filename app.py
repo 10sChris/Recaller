@@ -8,7 +8,6 @@ from flask import jsonify
 from recaller import search_drug, search_cosmetics
 
 
-
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = 'c29bcfa698752666def85f68880d22d8'
@@ -117,6 +116,19 @@ def drug_search_api():
     
     return jsonify({"results": res})
 
+@app.route("/api/cosmetic/search")
+def cosmetics_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+
+    try:
+        res = search_cosmetics(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
 
 @app.route("/update_server", methods=['POST'])
 def webhook():

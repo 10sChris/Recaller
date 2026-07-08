@@ -80,58 +80,39 @@ a.article-title:hover {
 }
 
 .drugs-page .search{
-  --padding: 14px;
-  width: max-content;
-  display: flex;
+  display: flex; 
   align-items: center;
-  padding: var(--padding);
-  border-radius: 28px;
-  background: #f6f6f6;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dddddd; 
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px; 
 }
 
-.drugs-page .search .search-input{
-  font-size: 16px;
-  font-family: 'Lexend', sans-serif;
-  color: #333333;
-  margin-left: var(--padding);
-  outline: none;
+.drugs-page .search-input{
+  flex: 1;
   border: none;
-  background: transparent;
-  width: 300px;
-}
-
-
-.cosmetics-page .search{
-  --padding: 14px;
-  width: max-content;
-  display: flex;
-  align-items: center;
-  padding: var(--padding);
-  border-radius: 28px;
-  background: #f6f6f6;
-}
-
-.cosmetics-page .search .search-input{
-  font-size: 16px;
-  font-family: 'Lexend', sans-serif;
-  color: #333333;
-  margin-left: var(--padding);
   outline: none;
-  border: none;
-  background: transparent;
-  width: 300px;
+  font-size: 16px;
 }
 
-.drugs-page .search .results-container{
-  width: 200px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  background-color: turquoise;
-  border-radius: 20px;
-  gap: 20px;
+.drugs-page .results-container{
+  display: grid;
+  gap: 10px;
 }
 
+.drug-card{
+  background: #ffffff; 
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 16px; 
+}
+
+.drug-card h3{
+  font-size: 20px;
+  margin-bottom: 10px; 
+}
 
 .food-page .search {
   display: flex; 
@@ -164,6 +145,41 @@ a.article-title:hover {
 }
 
 .food-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px; 
+}
+
+.cosmetics-page .search{
+  display: flex; 
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dddddd; 
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px; 
+}
+
+.cosmetics-page .search-input{
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.cosmetics-page .results-container{
+  display: grid;
+  gap: 10px;
+}
+
+.cosmetics-card{
+  background: #ffffff; 
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 16px; 
+}
+
+.cosmetics-card h3{
   font-size: 20px;
   margin-bottom: 10px; 
 }
