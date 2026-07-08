@@ -57,6 +57,7 @@ def register():
 
 FOOD_URL = "https://api.fda.gov/food/enforcement.json"
 
+#Helper function
 def search_food_recalls(query, limit=5):
     resp = requests.get(FOOD_URL, 
     params={
@@ -83,6 +84,20 @@ def search_food_recalls(query, limit=5):
         })
     return res 
 
+@app.route("/api/food/search")
+def food_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+    
+
+    try:
+        res = search_food_recalls(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": results})
 @app.route("/update_server", methods=['POST'])
 def webhook():
     if request.method == 'POST':

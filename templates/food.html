@@ -1,6 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="food-page">
     <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
-    <p>Hello</p>
+    <p>SEARCH FDA FOOD RECALLS HERE</p>
+
+    <form class="search">
+        <span class="material-symbols-outlined">search</span>
+        <input class="search-input" type="search" placeholder="Enter food...">
+
+    </form>
+
+    <p class="search-status"></p>
+    <div class="results-container"></div>
+</div>
+
+
 {% endblock content %}
