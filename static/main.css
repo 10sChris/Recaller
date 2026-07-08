@@ -161,10 +161,13 @@ body {
 
 /*Bottom half of page styling*/
   .popular-section {
-    padding: 70px 0 90px;
-    background: linear-gradient(180deg, #061b36, #020617);
-    color: white;
-    margin-top: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(14,165,233,.20),
+        white 35%
+      );
+      padding: 80px 0;
   }
 
   .popular-section .center-text {
