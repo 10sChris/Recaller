@@ -2,8 +2,13 @@ const searchInput = document.querySelector('.food-page .search-input');
 const resultsContainer = document.querySelector('.food-page .results-container');
 const searchStatus = document.querySelector('.food-page .search-status');
 const drugSearchStatus = document.querySelector('.drugs-page .search-status');
+const cosmeticSearchStatus = document.querySelector('.cosmetics-page .search-status');
 const drugSearchInput = document.querySelector('.drugs-page .search-input');
 const drugResultsContainer = document.querySelector('.drugs-page .results-container');
+const cosmeticSearchInput = document.querySelector('.cosmetics-page .search-input');
+const cosmeticResultsContainer = document.querySelector('.cosmetics-page .results-container');
+
+
 
 
 if (searchInput && resultsContainer) {
@@ -107,6 +112,60 @@ if (drugSearchInput && drugResultsContainer) {
 
                 `; 
                 drugResultsContainer.appendChild(card);
+            });
+
+
+        }, 400);
+    });
+}
+
+if (cosmeticSearchInput && cosmeticResultsContainer) {
+    let timer; 
+
+    cosmeticSearchInput.addEventListener('input', function() {
+        clearTimeout(timer);
+
+        timer = setTimeout(async function () { 
+            const query = cosmeticSearchInput.value.trim(); 
+
+            cosmeticResultsContainer.innerHTML = '';
+
+            if (!query) {
+                cosmeticSearchStatus.textContent = '';
+                return;
+            }
+
+            cosmeticSearchStatus.textContent = 'Searching...'
+
+            const resp = await fetch(`/api/cosmetics/search?q=${encodeURIComponent(query)}`)
+            const data = await resp.json()
+
+            if (data.error) {
+                cosmeticSearchStatus.textContent = data.error;
+                return; 
+            }
+
+            if (data.results.length === 0) {
+                cosmeticSearchStatus.textContent = 'No recalls found.'; 
+                return; 
+            }
+
+            cosmeticSearchStatus.textContent = `Showing ${data.results.length} result(s).`;
+
+            data.results.forEach(function (item) {
+                const card = document.createElement('div');
+                card.className = 'cosmetics-card'
+
+                card.innerHTML = `
+                <h3>${item.Cosmetic}</h3>
+                <p><strong>Reactions:</strong> ${item["Reactions"]}</p>
+                <p><strong>Patient Age:</strong> ${item["Patient Age"]}</p>
+                <p><strong>Patient Gender:</strong> ${item["Patient Gender"]}</p>
+                <p><strong>Report date:</strong> ${item["Report date"]}</p>
+
+
+                `; 
+                cosmeticResultsContainer.appendChild(card);
             });
 
 

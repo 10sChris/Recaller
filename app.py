@@ -117,6 +117,20 @@ def drug_search_api():
     
     return jsonify({"results": res})
 
+@app.route("/api/cosmetics/search")
+def cosmetic_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+    
+    try:
+        res = search_cosmetics(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
+
 
 @app.route("/update_server", methods=['POST'])
 def webhook():

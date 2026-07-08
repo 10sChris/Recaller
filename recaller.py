@@ -70,7 +70,7 @@ def search_drug(drug):
     drug_status = response.json()
 
     if "results" not in drug_status:
-        return None
+        return []
 
     items = drug_status["results"]
 
@@ -115,7 +115,7 @@ def search_cosmetics(cosmetic):
     cosmetic_status = response.json()
 
     if "results" not in cosmetic_status:
-        return None
+        return []
 
     items = cosmetic_status["results"]
 
@@ -126,10 +126,15 @@ def search_cosmetics(cosmetic):
       product_name = products[0].get("product_name", "N/A")
       reactions = item.get("reactions", [])
       reaction_text = ", ".join(reactions)
+      patient = item.get("patient")
+      gender = patient.get("gender", "N/A")
+      age = patient.get("age", "N/A")
 
       results.append({
           "Cosmetic": product_name,
           "Reactions": reaction_text,
+          "Patient Age": age,
+          "Patient Gender": gender,
           "Report date": item.get("event_date", "N/A")
       })
 
