@@ -11,7 +11,7 @@ my_api_key = os.getenv('GENAI_KEY')
 client = genai.Client(api_key=my_api_key)
 
 foodurl = "https://api.fda.gov/food/enforcement.json"
-drugurl = "https://api.fda.gov/drug/enforecement.json"
+drugurl = "https://api.fda.gov/drug/enforcement.json"
 cosmeticurl = "https://api.fda.gov/cosmetic/event.json"
 engine = db.create_engine('sqlite:///food_status.db')
 
@@ -42,7 +42,7 @@ def search_food(food):
     
     return results
 
-def select_food(food_item, summarize=True)
+def select_food(food_item, summarize=True):
 
     food_stats = pd.DataFrame([food_item])
 
@@ -50,7 +50,7 @@ def select_food(food_item, summarize=True)
 
         connection.execute(db.text
                             ("DELETE FROM food_status WHERE Food = :food"),
-                            {"food": item.get("product_description", "N/A")})
+                            {"food": food_item["Food"]})
         connection.commit()
 
     food_stats.to_sql('food_status', con=engine,
@@ -64,7 +64,7 @@ def search_drug(drug):
 
     response = requests.get(drugurl,
                             params={"search":
-                                    f"product_description",
+                                    f"product_description:{drug}",
                                     "limit": 5})
 
     drug_status = response.json()
@@ -86,7 +86,7 @@ def search_drug(drug):
 
     return results
 
-def select_drug(drug_item, summarize=True)
+def select_drug(drug_item, summarize=True):
 
     drug_stats = pd.DataFrame([drug_item])
 
@@ -94,21 +94,21 @@ def select_drug(drug_item, summarize=True)
 
         connection.execute(db.text
                            ("DELETE FROM drug_status WHERE Drug = :drug"),
-                           {"drug": item.get("product_description", "N/A")})
+                           {"drug": drug_item["Drug"]})
         connection.commit()
 
     drug_stats.to_sql('drug_status', con=engine,
                            if_exists='append', index=False)
 
     if summarize:
-        summary = summarize_food_and_drug(item)
+        summary = summarize_food_and_drug(drug_item)
         print(summary)
 
-  def search_cosmetics(cosmetic):
+def search_cosmetics(cosmetic):
 
     response = requests.get(cosmeticurl,
                             params={"search":
-                                    f"producst.product_name:{cosmetic}",
+                                    f"products.product_name:{cosmetic}",
                                     "limit": 5})
 
     cosmetic_status = response.json()
@@ -116,7 +116,7 @@ def select_drug(drug_item, summarize=True)
     if "results" not in cosmetic_status:
         return None
 
-    item = cosmetic_status["results"]
+    items = cosmetic_status["results"]
 
     results = []
 
@@ -127,14 +127,14 @@ def select_drug(drug_item, summarize=True)
       reaction_text = ", ".join(reactions)
 
       results.append({
-          "Cosmetic": product_name
-          "Reactions": reaction_text
+          "Cosmetic": product_name,
+          "Reactions": reaction_text,
           "Report date": item.get("event_date", "N/A")
       })
 
     return results
 
-def select_cosmetics(cosmetic_item, summarize=True)
+def select_cosmetics(cosmetic_item, summarize=True):
 
     cosmetic_stats = pd.DataFrame([cosmetic_item])
 
@@ -149,7 +149,7 @@ def select_cosmetics(cosmetic_item, summarize=True)
                            if_exists='append', index=False)
 
     if summarize:
-        summary = summarize_cosmetic(item)
+        summary = summarize_cosmetic(cosmetic_item)
         print(summary)
 
 
@@ -174,24 +174,25 @@ def delete_food(row_num):
 
 
 def summarize_food_and_drug(item):
-    prompt = f"""
+  prompt = f"""
   Explain this food recall straightforward in a sentence or two. 
   Then give a couple sentences to recommend an alternative item that is safer.
   Product: {item.get("product_description", "N/A")}
   Reason: {item.get("reason_for_recall", "N/A")}
   """
 
-    resp = client.interactions.create(
-        model="gemini-2.5-flash",
-        input=prompt
-    )
+  resp = client.interactions.create(
+      model="gemini-2.5-flash",
+      input=prompt
+  )
+  return resp.output_text
 
 def summarize_cosmetic(item):
   products = item.get("products", [])
   product_name = products[0].get("product_name", "N/A")
   reactions = item.get("reactions", [])
   reaction_text = ", ".join(reactions)
-    prompt = f"""
+  prompt = f"""
   Explain the reaction straightforward.
   Then give a couple sentences to recommend an alternative item that is safer.
   Product: {product_name}
