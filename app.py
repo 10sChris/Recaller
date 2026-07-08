@@ -3,6 +3,8 @@ from forms import RegistrationForm
 from flask_behind_proxy import FlaskBehindProxy
 import git
 from flask_sqlalchemy import SQLAlchemy
+import requests 
+from flask import jsonify 
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -22,6 +24,7 @@ class User(db.Model):
 
 with app.app_context():
   db.create_all()
+
 
 
 @app.route("/")
@@ -51,6 +54,34 @@ def register():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
+
+FOOD_URL = "https://api.fda.gov/food/enforcement.json"
+
+def search_food_recalls(query, limit=5):
+    resp = requests.get(FOOD_URL, 
+    params={
+        "search": f'product_description:"{query}"', 
+        "limit": limit 
+    },
+    timeout=8)
+
+    if resp.status_code == 404:
+        return []
+    
+    resp.raise_for_status()
+    data = resp.json()
+
+    res = []
+
+    for item in data.get("results", []):
+        res.append({
+            "food": item.get("product_description", "N/A"),
+            "company": item.get("recalling_firm", "N/A"), 
+            "reason": item.get("reason_for_recall", "N/A"), 
+            "date": item.get("recall_initiation_date", "N/A"),
+            "status": item.get("status", "N/A") 
+        })
+    return res 
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
