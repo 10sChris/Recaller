@@ -145,6 +145,13 @@ body {
   }
 
 /*Slideshow styling*/
+.minimal-carousel {
+  background: rgba(255, 255, 255, .85);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(2,132,199,.12);
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.08);
+}
 
 .popular-section {
   background: linear-gradient(to bottom, rgba(14, 165, 233, 0.18), #f8fafc 35%, #ffffff 100%);
@@ -179,6 +186,10 @@ body {
   object-fit: contain;
   display: block;
   margin: auto;
+
+  background: #eef6fb;
+  border-radius: 20px;
+  padding: 18px;
 }
 
 .minimal-carousel .carousel-control-prev,
@@ -188,9 +199,11 @@ body {
 
 .minimal-carousel .carousel-control-prev-icon,
 .minimal-carousel .carousel-control-next-icon {
-  background-color: rgba(2, 132, 199, 0.9);
+  background-color: white;
   border-radius: 50%;
-  padding: 18px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.15);
+  filter: invert(32%) sepia(86%) saturate(1200%) hue-rotate(180deg);
 }
 
 .minimal-carousel .carousel-indicators {
