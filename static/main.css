@@ -131,3 +131,39 @@ a.article-title:hover {
   border-radius: 20px;
   gap: 20px;
 }
+
+
+.food-page .search {
+  display: flex; 
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dddddd; 
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px; 
+}
+
+.food-page .search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.food-page .results-container {
+  display: grid;
+  gap: 10px;
+}
+
+.food-card {
+  background: #ffffff; 
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 16px; 
+}
+
+.food-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px; 
+}
