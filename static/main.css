@@ -2,6 +2,7 @@ body {
     background: #f5f7fb;
     color: #1f2937;
     font-family: "Inter", "Segoe UI", sans-serif;
+    padding-top: 56px;
   }
 
   .center-text {
