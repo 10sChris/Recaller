@@ -2,14 +2,15 @@
 {% block content %}
 <div class="drugs-page">
     <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
-    <h1> Welcome to the Drugs Page where you can find out info regarding different types of drugs</h1>
-    <form>
-    <div class = "search">
+    <p>SEARCH FDA FOOD RECALLS HERE</p>
+
+    <form class = "search">
         <span class="material-symbols-outlined"> search </span>
-        <input class="search-input" type="search" placeholder="Search">
-        <div class="results-container"></div>
-    </div>
+        <input class="search-input" type="search" placeholder="Enter a drug...">
+
     </form>
+
+    <p class="search-status"></p>
+    <div class="results-container"></div>
 </div>
 {% endblock content %}

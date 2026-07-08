@@ -79,6 +79,7 @@ def search_drug(drug):
     for item in items:
       results.append({
           "Drug": item.get("product_description", "N/A"),
+          "Company": item.get("recalling_firm", "N/A"),
           "Reason for recall": item.get("reason_for_recall", "N/A"),
           "Recall date": item.get("recall_initiation_date", "N/A"),
           "Status": item.get("status", "N/A")

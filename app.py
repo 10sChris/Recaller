@@ -5,6 +5,9 @@ import git
 from flask_sqlalchemy import SQLAlchemy
 import requests 
 from flask import jsonify 
+from recaller import search_drug, search_cosmetics
+
+
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -98,6 +101,23 @@ def food_search_api():
         return jsonify({"error": "Could not reach FDA API", "results": []}), 500
     
     return jsonify({"results": res})
+
+
+@app.route("/api/drug/search")
+def drug_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+
+    try:
+        res = search_drug(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
+
+
 @app.route("/update_server", methods=['POST'])
 def webhook():
     if request.method == 'POST':
