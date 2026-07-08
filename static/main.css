@@ -158,3 +158,43 @@ body {
     object-fit: cover;
     background-color: white;
   }
+
+/*Bottom half of page styling*/
+  .popular-section {
+    padding: 70px 0 90px;
+    background: linear-gradient(180deg, #061b36, #020617);
+    color: white;
+    margin-top: 0;
+  }
+
+  .popular-section .center-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 35px;
+  }
+
+  .popular-section .carousel {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 35px;
+    border-radius: 24px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  }
+
+  .popular-section .carousel-item img{
+    width: 100%;
+    height: 430px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    padding: 22px;
+  }
+
+  .popular-section .carousel-control-prev-icon,
+  .popular-section .carousel-control-next-icon {
+    background-color: rgba(37, 99, 235, 0.95);
+    border-radius: 50%;
+    padding: 24px;
+  }

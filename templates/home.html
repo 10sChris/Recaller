@@ -29,4 +29,50 @@
         </div>
     </div>
 </section>
+
+<section class="popular-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Popular Recalled Brands</h2>
+            <p>Browse examples of products that have appeared in recall reports.</p>
+        </div>
+
+        <div id="homeSlideshow" class="carousel slide brand-carousel" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <div class="brand-slide">
+                        <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" alt="slide 1">
+                        <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" alt="slide 2">
+                        <img src="{{ url_for('static', filename='images/slide3.jpg') }}" alt="slide 3">
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="brand-slide">
+                        <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" alt="slide 1">
+                        <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" alt="slide 2">
+                        <img src="{{ url_for('static', filename='images/slide3.jpg') }}" alt="slide 3">
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeSlideshow" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#homeSlideshow" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#homeSlideshow" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#homeSlideshow" data-bs-slide-to="0"></button>
+            </div>
+
+        </div>
+
+    </div>
+</section>
 {% endblock content %}
