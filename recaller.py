@@ -47,13 +47,18 @@ def select_food(food_item, summarize=True):
 
     food_stats = pd.DataFrame([food_item])
 
-    with engine.connect() as connection:
+    try:
+        with engine.connect() as connection:
 
-        connection.execute(db.text
-                            ("DELETE FROM food_status WHERE Food = :food"),
-                            {"food": food_item["Food"]})
-        connection.commit()
+            connection.execute(db.text
+                                ("DELETE FROM food_status WHERE Food = :food"),
+                                {"food": food_item["Food"]})
+            connection.commit()
 
+    except:
+        pass
+
+    
     food_stats.to_sql('food_status', con=engine,
                             if_exists='append', index=False)
 
@@ -94,13 +99,17 @@ def select_drug(drug_item, summarize=True):
     drug_item["Type"] = "drug"
 
     drug_stats = pd.DataFrame([drug_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
+            connection.execute(db.text
+                            ("DELETE FROM drug_status WHERE Drug = :drug"),
+                            {"drug": drug_item["Drug"]})
+            connection.commit()
 
-        connection.execute(db.text
-                           ("DELETE FROM drug_status WHERE Drug = :drug"),
-                           {"drug": drug_item["Drug"]})
-        connection.commit()
+    except:
+        pass
+
 
     drug_stats.to_sql('drug_status', con=engine,
                            if_exists='append', index=False)
@@ -149,13 +158,15 @@ def select_cosmetics(cosmetic_item, summarize=True):
     cosmetic_item["Type"] = "cosmetic"
 
     cosmetic_stats = pd.DataFrame([cosmetic_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
-
-        connection.execute(db.text
-                           ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
-                           {"cosmetic": cosmetic_item["Cosmetic"]})
-        connection.commit()
+            connection.execute(db.text
+                            ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
+                            {"cosmetic": cosmetic_item["Cosmetic"]})
+            connection.commit()
+    except:
+        pass
 
     cosmetic_stats.to_sql('cosmetic_status', con=engine,
                            if_exists='append', index=False)
