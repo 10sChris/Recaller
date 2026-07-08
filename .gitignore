@@ -2,3 +2,4 @@ __pycache__
 .codio
 instance/
 *.pyc
+venv/

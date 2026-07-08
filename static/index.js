@@ -10,7 +10,7 @@ if (searchInput && resultsContainer) {
         clearTimeout(timer);
 
         timer = setTimeout(async function () { 
-            const q = searchInput.ariaValueMax.trim(); 
+            const query = searchInput.value.trim(); 
 
             resultsContainer.innerHTML = '';
 

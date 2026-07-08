@@ -97,7 +97,7 @@ def food_search_api():
     except requests.RequestException:
         return jsonify({"error": "Could not reach FDA API", "results": []}), 500
     
-    return jsonify({"results": results})
+    return jsonify({"results": res})
 @app.route("/update_server", methods=['POST'])
 def webhook():
     if request.method == 'POST':
