@@ -13,7 +13,7 @@ def main():
         command = input("Enter a command: ")
         if command == "1":
             food = input("Enter a food: ")
-            recaller.check_food(food)
+            recaller.select_food(food, summarize=False)
 
         elif command == "2":
             recaller.show_db()

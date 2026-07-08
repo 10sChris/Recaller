@@ -43,6 +43,7 @@ def search_food(food):
     return results
 
 def select_food(food_item, summarize=True):
+    food_item["Type"] = "food"
 
     food_stats = pd.DataFrame([food_item])
 
@@ -61,6 +62,7 @@ def select_food(food_item, summarize=True):
         print(summary)
 
 def search_drug(drug):
+    
 
     response = requests.get(drugurl,
                             params={"search":
@@ -88,6 +90,8 @@ def search_drug(drug):
     return results
 
 def select_drug(drug_item, summarize=True):
+
+    drug_item["Type"] = "drug"
 
     drug_stats = pd.DataFrame([drug_item])
 
@@ -142,6 +146,8 @@ def search_cosmetics(cosmetic):
 
 def select_cosmetics(cosmetic_item, summarize=True):
 
+    cosmetic_item["Type"] = "cosmetic"
+
     cosmetic_stats = pd.DataFrame([cosmetic_item])
 
     with engine.connect() as connection:
@@ -163,12 +169,12 @@ def show_db():
     with engine.connect() as connection:
         query_result = connection.execute(
             db.text("SELECT rowid, * FROM food_status")).fetchall()
+    if not query_result:
+        return None
+    rows = []
     for row in query_result:
-        print(f"\nROW ID: {row[0]}")
-        print(f"Food: {row[1]}")
-        print(f"Reason for recall: {row[2]}")
-        print(f"Recall date: {row[3]}")
-        print(f"Status: {row[4]}")
+        rows.append(dict(row._mapping))
+    return rows
 
 
 def delete_food(row_num):
