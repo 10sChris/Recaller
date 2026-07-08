@@ -37,24 +37,18 @@
             <p>Browse examples of products that have appeared in recall reports.</p>
         </div>
 
-        <div id="homeSlideshow" class="carousel slide brand-carousel" data-bs-ride="carousel">
+        <div id="homeSlideshow" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <div class="brand-slide">
-                        <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" alt="slide 1">
-                        <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" alt="slide 2">
-                        <img src="{{ url_for('static', filename='images/slide3.jpg') }}" alt="slide 3">
-                    </div>
+                    <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" class="d-block w-100" alt="Slide 1">
                 </div>
 
-                <div class="carousel-item">
-                    <div class="brand-slide">
-                        <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" alt="slide 1">
-                        <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" alt="slide 2">
-                        <img src="{{ url_for('static', filename='images/slide3.jpg') }}" alt="slide 3">
-                    </div>
+                <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" class="d-block w-100" alt="Slide 2">
                 </div>
+
+                
 
             </div>
 
