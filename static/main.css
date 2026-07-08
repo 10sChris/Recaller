@@ -1,185 +1,197 @@
 body {
-    background: #f3f3f4;
-    color: #333333;
-    margin-top: 5rem;
+    background: #f5f7fb;
+    color: #1f2937;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    padding-top: 56px;
+  }
+
+  .center-text {
+    text-align: center;
+  } 
+  
+  .bg-steel {
+    background-color: #075985;
   }
   
-h1, h2, h3, h4, h5, h6 {
-  color: #444444;
-}
+  .site-header .navbar-nav .nav-link {
+    color: #e0f2fe;
+    font-weight: 500;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
 
-.bg-steel {
-  background-color: #5f788a;
-}
+  .navbar-brand {
+    font-weight: 700;
+    letter-spacing: .3px;
+  }
 
-.site-header .navbar-nav .nav-link {
-  color: #cbd5db;
-}
+  .hero {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    background: 
+      linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.75)),
+      url("../static/images/homebg.jpg");
+    background-size: cover;
+    background-position: center;
+    margin-top: -24px;
+  }
 
-.site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
-}
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    padding: 80px 15px;
+  }
 
-.site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
-}
+  .hero-badge {
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
 
-.content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
-}
+  .hero-title {
+    font-size: clamp(2.7rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
 
-.article-title {
-  color: #444444;
-}
+  .hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 560px;
+    color: #e0f2fe;
+  }
+  
+  .hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+  }
 
-a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
+  .hero-buttons .btn {
+    border-radius: 999px;
+    padding: 12px 24px;
+    font-weight: 600;
+  }
 
-.article-content {
-  white-space: pre-line;
-}
+  .content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+  
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
 
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
+  main.container {
+    margin-top: 90px;
+  }
 
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
-}
+  .carousel {
+    max-width: 1100px;
+    margin: 30px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
 
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
+  .carousel-item img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    background-color: white;
+  }
 
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
+/*Bottom half of page styling*/
+  .popular-section {
+    background: 
+      linear-gradient(
+        to bottom,
+        rgba(14, 165, 233,.20),
+        white 35%
+      );
+    padding: 80px 0;
+  }
 
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
+  .popular-section .center-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 35px;
+  }
 
-.account-heading {
-  font-size: 2.5rem;
-}
+  .popular-section .carousel {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
 
-.drugs-page .search{
-  display: flex; 
-  align-items: center;
-  gap: 10px;
-  background: #ffffff;
-  border: 1px solid #dddddd; 
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 16px; 
-}
+  .popular-section .carousel-item img{
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+    background: transparent;
+  }
 
-.drugs-page .search-input{
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 16px;
-}
-
-.drugs-page .results-container{
-  display: grid;
-  gap: 10px;
-}
-
-.drug-card{
-  background: #ffffff; 
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  padding: 16px; 
-}
-
-.drug-card h3{
-  font-size: 20px;
-  margin-bottom: 10px; 
-}
-
-.food-page .search {
-  display: flex; 
-  align-items: center;
-  gap: 10px;
-  background: #ffffff;
-  border: 1px solid #dddddd; 
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 16px; 
-}
-
-.food-page .search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 16px;
-}
-
-.food-page .results-container {
-  display: grid;
-  gap: 10px;
-}
-
-.food-card {
-  background: #ffffff; 
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  padding: 16px; 
-}
-
-.food-card h3 {
-  font-size: 20px;
-  margin-bottom: 10px; 
-}
-
-.cosmetics-page .search{
-  display: flex; 
-  align-items: center;
-  gap: 10px;
-  background: #ffffff;
-  border: 1px solid #dddddd; 
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 16px; 
-}
-
-.cosmetics-page .search-input{
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 16px;
-}
-
-.cosmetics-page .results-container{
-  display: grid;
-  gap: 10px;
-}
-
-.cosmetics-card{
-  background: #ffffff; 
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  padding: 16px; 
-}
-
-.cosmetics-card h3{
-  font-size: 20px;
-  margin-bottom: 10px; 
-}
+  .popular-section .carousel-control-prev-icon,
+  .popular-section .carousel-control-next-icon {
+    background-color: rgba(37, 99, 235, 0.95);
+    border-radius: 50%;
+    padding: 24px;
+  }

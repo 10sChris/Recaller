@@ -1,6 +1,72 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
-    
+
+<section class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="container-fluid hero-content px-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge hero-badge">FDA Recall Search</span>
+
+                <h1 class="hero-title">
+                    Stay updated on recalls that matter.
+                </h1>
+
+                <p class="hero-subtitle">
+                    Search food, drug, and cosmetic recalls in one clean and simple place.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="/food" class="btn btn-outline-light btn-lg">Food Recalls</a>
+                    <a href="/drugs" class="btn btn-outline-light btn-lg">Drug Recalls</a>
+                    <a href="/cosmetics" class="btn btn-outline-light btn-lg">Cosmetic Recalls</a>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</section>
+
+<section class="popular-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Popular Recalled Brands</h2>
+            <p>Browse examples of products that have appeared in recall reports.</p>
+        </div>
+
+        <div id="homeSlideshow" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='images/slide1.1.jpg') }}" class="d-block w-100" alt="Slide 1">
+                </div>
+
+                <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='images/slide1.2.jpg') }}" class="d-block w-100" alt="Slide 2">
+                </div>
+
+                
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeSlideshow" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#homeSlideshow" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#homeSlideshow" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#homeSlideshow" data-bs-slide-to="0"></button>
+            </div>
+
+        </div>
+
+    </div>
+</section>
 {% endblock content %}
