@@ -8,6 +8,13 @@ const cosmeticsSearchStatus = document.querySelector('.cosmetics-page .search-st
 const cosmeticsSearchInput = document.querySelector('.cosmetics-page .search-input')
 const cosmeticsResultsContainer = document.querySelector('.cosmetics-page .results-container')
 
+const foodRecommenderContainer = document.querySelector('.food-page .popular-foods')
+const foodRecommendOption = document.querySelector('.food-page .access-button')
+
+foodRecommendOption.addEventListener('click', function(event){
+    event.preventDefault()
+    foodRecommenderContainer.classList.add('visible')
+})
 
 if (searchInput && resultsContainer) {
     let timer; 
@@ -46,16 +53,24 @@ if (searchInput && resultsContainer) {
             data.results.forEach(function (item) {
                 const card = document.createElement('div');
                 card.className = 'food-card'
+                if (item.status === "Terminated") {
+                    card.innerHTML = `
+                    <h3>${item.food}</h3>
+                    <p><strong>Company:</strong> ${item.company}</p>
+                    <p><strong>Reason:</strong> ${item.reason}</p>
+                    <p><strong>Recall date: </strong>${item.date}</p>
+                    <p class="status-bad">${item.status}</p>
+                    `; 
 
-                card.innerHTML = `
-                <h3>${item.food}</h3>
-                <p><strong>Company:</strong> ${item.company}</p>
-                <p><strong>Reason:</strong> ${item.reason}</p>
-                <p><strong>Recall date: </strong>${item.date}</p>
-                <p><strong>Status: </strong>${item.status}</p>
-
-
+                } else if(item.status === "Ongoing"){
+                    card.innerHTML = `
+                    <h3>${item.food}</h3>
+                    <p><strong>Company:</strong> ${item.company}</p>
+                    <p><strong>Reason:</strong> ${item.reason}</p>
+                    <p><strong>Recall date: </strong>${item.date}</p>
+                    <p class="status-okay">${item.status}</p>
                 `; 
+                }
                 resultsContainer.appendChild(card);
             });
 
@@ -101,16 +116,25 @@ if (drugSearchInput && drugResultsContainer) {
             data.results.forEach(function (item) {
                 const card = document.createElement('div');
                 card.className = 'drug-card'
+                if (item["Status"] == "Terminated") {
+                    card.innerHTML = `
+                    <h3>${item.Drug}</h3>
+                    <p><strong>Company:</strong> ${item["Company"]}</p>
+                    <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
+                    <p><strong>Recall date: </strong>${item["Recall date"]}</p>
+                    <p class="status-bad"><strong>${item["Status"]}</p>
+                    `; 
+                } else if(item["Status"] === "Ongoing"){
+                    card.innerHTML = `
+                    <h3>${item.Drug}</h3>
+                    <p><strong>Company:</strong> ${item["Company"]}</p>
+                    <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
+                    <p><strong>Recall date: </strong>${item["Recall date"]}</p>
+                    <p class="status-okay">${item["Status"]}</p>
+                    `;
+                }
 
-                card.innerHTML = `
-                <h3>${item.Drug}</h3>
-                <p><strong>Company:</strong> ${item["Company"]}</p>
-                <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
-                <p><strong>Recall date: </strong>${item["Recall date"]}</p>
-                <p><strong>Status: </strong>${item["Status"]}</p>
-
-
-                `; 
+                
                 drugResultsContainer.appendChild(card);
             });
 
