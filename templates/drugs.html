@@ -29,13 +29,18 @@
         </div>
     </section>
 
-    <form class = "search">
-        <span class="material-symbols-outlined"> search </span>
-        <input class="search-input" type="search" placeholder="Enter a drug...">
-
-    </form>
-
-    <p class="search-status"></p>
-    <div class="results-container"></div>
+    <section class="popular-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="search-title">{{ subtitle }}</h2>
+                <p>Search FDA for Drug Recalls</p>
+            </div>
+        <form class="search">
+            <span class="material-symbols-outlined">search</span>
+            <input class="search-input" type="search" placeholder="Enter drug...">
+        </form>
+        <p class="search-status"></p>
+        <div class="results-container"></div>
+    </section>
 </div>
 {% endblock content %}

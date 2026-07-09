@@ -1,20 +1,24 @@
 const searchInput = document.querySelector('.food-page .search-input');
 const resultsContainer = document.querySelector('.food-page .results-container');
 const searchStatus = document.querySelector('.food-page .search-status');
+
 const drugSearchStatus = document.querySelector('.drugs-page .search-status');
 const drugSearchInput = document.querySelector('.drugs-page .search-input');
 const drugResultsContainer = document.querySelector('.drugs-page .results-container');
-const cosmeticsSearchStatus = document.querySelector('.cosmetics-page .search-status')
-const cosmeticsSearchInput = document.querySelector('.cosmetics-page .search-input')
-const cosmeticsResultsContainer = document.querySelector('.cosmetics-page .results-container')
+
+const cosmeticsSearchStatus = document.querySelector('.cosmetics-page .search-status');
+const cosmeticsSearchInput = document.querySelector('.cosmetics-page .search-input');
+const cosmeticsResultsContainer = document.querySelector('.cosmetics-page .results-container');
 
 const foodRecommenderContainer = document.querySelector('.food-page .popular-foods')
 const foodRecommendOption = document.querySelector('.food-page .access-button')
 
-foodRecommendOption.addEventListener('click', function(event){
-    event.preventDefault()
-    foodRecommenderContainer.classList.add('visible')
-})
+if(foodRecommendOption && foodRecommenderContainer){
+    foodRecommendOption.addEventListener('click', function(event){
+        event.preventDefault()
+        foodRecommenderContainer.classList.add('visible')
+    })
+}
 
 if (searchInput && resultsContainer) {
     let timer; 
@@ -116,7 +120,7 @@ if (drugSearchInput && drugResultsContainer) {
             data.results.forEach(function (item) {
                 const card = document.createElement('div');
                 card.className = 'drug-card'
-                if (item["Status"] == "Terminated") {
+                if (item["Status"] === "Terminated") {
                     card.innerHTML = `
                     <h3>${item.Drug}</h3>
                     <p><strong>Company:</strong> ${item["Company"]}</p>
