@@ -237,6 +237,14 @@ body {
     max-width: fit-content;
   }
 
+  .food-page .section-title p {
+    color: white;
+  }
+
+  .food-page .section-title h2 {
+    color: white;
+  }
+
 
 
 
