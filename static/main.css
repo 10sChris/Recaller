@@ -31,6 +31,11 @@ body {
     letter-spacing: .3px;
   }
 
+  .navbar-nav .nav-link i {
+    margin-right: 6px;
+    font-size: 1rem;
+  }
+
   .hero {
     position: relative;
     min-height: 620px;
