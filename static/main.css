@@ -224,8 +224,18 @@ body {
   }
   
   .food-page .access-button{
-    border-radius: 20px;
-    width: max-content;
+    background: white;
+    color: #075985;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .food-page .access-button:hover {
+    background: #e0f2fe;
+    transform: translateY(-2px);
   }
   
   .food-card h3 {
