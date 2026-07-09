@@ -44,6 +44,239 @@ body {
     margin-top: -24px;
   }
 
+  .food-page .hero{
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    background: 
+      linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.75)),
+      url("../static/images/food.jpg");
+    background-size: cover;
+    background-position: center;
+    margin-top: -24px;
+  }
+
+  .drugs-page .hero {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    background: 
+      linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.75)),
+      url("../static/images/drugs.jpg");
+    background-size: cover;
+    background-position: center;
+    margin-top: -24px;
+  }
+
+  .drugs-page .section-title{
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.75)) ;
+    border-radius: 20px;
+    text-align: center;
+    padding: 16px;
+    color: white;
+  }
+
+  .food-page .section-title{
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.75)) ;
+    border-radius: 20px;
+    text-align: center;
+    padding: 16px;
+    color: white;
+  }
+
+  .drugs-page .search{
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid #dddddd; 
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px; 
+    max-width: 900px;  
+    margin-left: 200px;
+    margin-top: 50px;
+  }
+
+  .drugs-page .search-status{
+    margin-left: 20px;
+  }
+  
+  .drugs-page .search-input{
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+  
+  .drugs-page .results-container{
+    display: grid;
+    gap: 10px;
+    max-width: 900px;
+    margin-left: 20px;
+  }
+
+  .drugs-page .access-button {
+    border-radius: 20px;
+    width: max-content;
+  }
+
+  .drugs-page .popular-drugs {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .popular-drugs.visible{
+    opacity: 1;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .drug-card{
+    background: white; 
+    border: 7px solid #dddddd;
+    border-radius: 20px;
+    padding: 16px;
+    color: black;
+    border-left-color: #075985;
+  }
+  
+  .drug-card h3{
+    font-size: 20px;
+    margin-bottom: 10px; 
+  }
+
+  
+  .food-page .search {
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid #dddddd; 
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px; 
+    max-width: 900px;  
+    margin-left: 200px;
+    margin-top: 50px;
+  }
+
+  .food-page .search-status{
+    margin-left: 20px;
+  }
+  
+  .food-page .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+  
+  .food-page .results-container {
+    display: grid;
+    gap: 10px;
+    max-width: 900px;
+    margin-left: 20px;
+  }
+  
+  .food-card {
+    background: white ; 
+    border: 7px solid #dddddd;
+    border-radius: 20px;
+    padding: 16px;
+    color: black;
+    border-left-color: #075985;
+  }
+  
+  .food-page .access-button{
+    border-radius: 20px;
+    width: max-content;
+  }
+  
+  .food-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px; 
+  }
+
+  .food-page .popular-foods{
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .popular-foods.visible{
+    opacity: 1;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .food-card .status-bad{
+    background-color: #FCEBEB;
+    color: #791F1F;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    max-width: fit-content;
+  }
+
+  .food-card .status-okay{
+    background-color: #FCEBEB;
+    color: #791F1F;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    max-width: fit-content;
+  }
+
+
+
+
+
+  .cosmetics-page .search{
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid #dddddd; 
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px; 
+  }
+  
+  .cosmetics-page .search-input{
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+  
+  .cosmetics-page .results-container{
+    display: grid;
+    gap: 10px;
+  }
+  
+  .cosmetics-card{
+    background: #ffffff; 
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    padding: 16px; 
+  }
+  
+  .cosmetics-card h3{
+    font-size: 20px;
+    margin-bottom: 10px; 
+  }
+
+
   .hero-content {
     position: relative;
     z-index: 2;

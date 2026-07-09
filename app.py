@@ -3,6 +3,10 @@ from forms import RegistrationForm
 from flask_behind_proxy import FlaskBehindProxy
 import git
 from flask_sqlalchemy import SQLAlchemy
+import requests 
+from flask import jsonify 
+from recaller import search_drug, search_cosmetics
+
 
 homeText = "Welcome to the Food Recall App where you can find out different info regarding Food, Drugs and Cosmetics."
 
@@ -24,6 +28,7 @@ class User(db.Model):
 
 with app.app_context():
   db.create_all()
+
 
 
 @app.route("/")
@@ -53,6 +58,79 @@ def register():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
+
+FOOD_URL = "https://api.fda.gov/food/enforcement.json"
+
+#Helper function
+def search_food_recalls(query, limit=5):
+    resp = requests.get(FOOD_URL, 
+    params={
+        "search": f'product_description:"{query}"', 
+        "limit": limit 
+    },
+    timeout=8)
+
+    if resp.status_code == 404:
+        return []
+    
+    resp.raise_for_status()
+    data = resp.json()
+
+    res = []
+
+    for item in data.get("results", []):
+        res.append({
+            "food": item.get("product_description", "N/A"),
+            "company": item.get("recalling_firm", "N/A"), 
+            "reason": item.get("reason_for_recall", "N/A"), 
+            "date": item.get("recall_initiation_date", "N/A"),
+            "status": item.get("status", "N/A") 
+        })
+    return res 
+
+@app.route("/api/food/search")
+def food_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+    
+
+    try:
+        res = search_food_recalls(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
+
+
+@app.route("/api/drug/search")
+def drug_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+
+    try:
+        res = search_drug(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
+
+@app.route("/api/cosmetic/search")
+def cosmetics_search_api():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"results": []})
+
+    try:
+        res = search_cosmetics(query)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+    
+    return jsonify({"results": res})
 
 @app.route("/update_server", methods=['POST'])
 def webhook():

@@ -1,5 +1,46 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
+<div class="drugs-page">
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container-fluid hero-content px-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="badge hero-badge">FDA Recall Search</span>
+    
+                    <h1 class="hero-title">
+                        Drugs
+                    </h1>
+    
+                    <p class="hero-subtitle">
+                        Browse through pharmaceuticals to understand availability and usage guidelines for everything from Advil to Zoloft with data from the FDA
+                    </p>
+
+                    <div class="surprise buttons">
+                        <p>Click access to see our <strong>recommended</strong> drugs to query</p>
+                        <button class="access-button"> Access </button>
+                        <div class="popular-drugs"> 
+                            <div class="popular-drugs btn btn-outline-light btn-lg">Adderall</div>
+                            <div class="popular-drugs btn btn-outline-light btn-lg">Flonase</div>
+                            <div class="popular-drugs btn btn-outline-light btn-lg">Ibuprofen</div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="search-title">{{ subtitle }}</h2>
+                <p>Search FDA for Drug Recalls</p>
+            </div>
+        <form class="search">
+            <span class="material-symbols-outlined">search</span>
+            <input class="search-input" type="search" placeholder="Enter drug...">
+        </form>
+        <p class="search-status"></p>
+        <div class="results-container"></div>
+    </section>
+</div>
 {% endblock content %}

@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="cosmetics-page">
     <h2>{{ subtitle }}</h2>
-    <p>{{ text }}</p>
+    <p>SEARCH FDA COSMETICS RECALLS HERE</p>
+
+    <form class = "search">
+        <span class="material-symbols-outlined"> search </span>
+        <input class="search-input" type="search" placeholder="Enter a cosmetic...">
+
+    </form>
+
+    <p class="search-status"></p>
+    <div class="results-container"></div>
+</div>
 {% endblock content %}
