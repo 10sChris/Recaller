@@ -223,6 +223,11 @@ body {
     border-left-color: #075985;
     transition: .25s;
   }
+
+  .food-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+  }
   
   .food-page .access-button{
     background: white;
