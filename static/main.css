@@ -31,6 +31,17 @@ body {
     letter-spacing: .3px;
   }
 
+  .navbar-brand i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+    vertical-align: middle;
+  }
+
+  .navbar-nav .nav-link i {
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+
   .hero {
     position: relative;
     min-height: 620px;
@@ -55,6 +66,14 @@ body {
     background-size: cover;
     background-position: center;
     margin-top: -24px;
+  }
+
+  .drugs-page .section-title p {
+    color: white;
+  }
+
+  .drugs-page .section-title h2 {
+    color: white;
   }
 
   .drugs-page .hero {
@@ -155,12 +174,14 @@ body {
     width: max-content;
     box-shadow: 0 8px 18px rgba(2, 48, 71, 0.18);
     cursor: pointer;
+    transition: 0.2s;
   }
 
   .food-page .access-button:hover,
   .drugs-page .access-button:hover,
   .cosmetics-page .access-button:hover {
     background: #e0f2fe;
+    transform: translateY(-2px);
   }
 
   .food-page .access-button:focus,
@@ -239,6 +260,12 @@ body {
     padding: 16px;
     color: black;
     border-left-color: #075985;
+    transition: .25s;
+  }
+
+  .food-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
   }
   
   .food-card h3 {
@@ -384,6 +411,14 @@ body {
     margin-top: 10px;
     padding: 10px 12px;
     white-space: pre-line;
+  }
+
+  .food-page .section-title p {
+    color: white;
+  }
+
+  .food-page .section-title h2 {
+    color: white;
   }
 
 

@@ -45,7 +45,6 @@ if(foodRecommendOption && foodRecommenderContainer){
     })
 }
 
-//function to load alternatives
 async function loadAlternatives(button, resultBox, payload) {
     button.disabled = true;
     resultBox.hidden = false;
