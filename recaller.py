@@ -43,16 +43,20 @@ def search_food(food):
     return results
 
 def select_food(food_item, summarize=True):
-
     food_stats = pd.DataFrame([food_item])
 
-    with engine.connect() as connection:
+    try:
+        with engine.connect() as connection:
 
-        connection.execute(db.text
-                            ("DELETE FROM food_status WHERE Food = :food"),
-                            {"food": food_item["Food"]})
-        connection.commit()
+            connection.execute(db.text
+                                ("DELETE FROM food_status WHERE Food = :food"),
+                                {"food": food_item["Food"]})
+            connection.commit()
 
+    except:
+        pass
+
+    
     food_stats.to_sql('food_status', con=engine,
                             if_exists='append', index=False)
 
@@ -60,23 +64,28 @@ def select_food(food_item, summarize=True):
         summary = summarize_food_and_drug(food_item)
         print(summary)
 
-def search_drug(drug):
+def search_drug(drug, limit=5, offset=0, include_more=False):
+    
 
     response = requests.get(drugurl,
                             params={"search":
                                     f"product_description:{drug}",
-                                    "limit": 5})
+                                    "limit": limit + 1,
+                                    "skip": offset})
 
     drug_status = response.json()
 
     if "results" not in drug_status:
-        return None
+        if include_more:
+            return [], False
+        return []
 
     items = drug_status["results"]
+    has_more = len(items) > limit
 
     results = []
 
-    for item in items:
+    for item in items[:limit]:
       results.append({
           "Drug": item.get("product_description", "N/A"),
           "Company": item.get("recalling_firm", "N/A"),
@@ -85,18 +94,26 @@ def search_drug(drug):
           "Status": item.get("status", "N/A")
       })
 
+    if include_more:
+        return results, has_more
     return results
 
 def select_drug(drug_item, summarize=True):
 
+    drug_item["Type"] = "drug"
+
     drug_stats = pd.DataFrame([drug_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
+            connection.execute(db.text
+                            ("DELETE FROM drug_status WHERE Drug = :drug"),
+                            {"drug": drug_item["Drug"]})
+            connection.commit()
 
-        connection.execute(db.text
-                           ("DELETE FROM drug_status WHERE Drug = :drug"),
-                           {"drug": drug_item["Drug"]})
-        connection.commit()
+    except:
+        pass
+
 
     drug_stats.to_sql('drug_status', con=engine,
                            if_exists='append', index=False)
@@ -105,46 +122,61 @@ def select_drug(drug_item, summarize=True):
         summary = summarize_food_and_drug(drug_item)
         print(summary)
 
-def search_cosmetics(cosmetic):
+def search_cosmetics(cosmetic, limit=5, offset=0, include_more=False):
 
     response = requests.get(cosmeticurl,
                             params={"search":
                                     f"products.product_name:{cosmetic}",
-                                    "limit": 5})
+                                    "limit": limit + 1,
+                                    "skip": offset})
 
     cosmetic_status = response.json()
 
     if "results" not in cosmetic_status:
-        return None
+        if include_more:
+            return [], False
+        return []
 
     items = cosmetic_status["results"]
+    has_more = len(items) > limit
 
     results = []
 
-    for item in items:
-      products = item.get("products", [{}])
+    for item in items[:limit]:
+      products = item.get("products") or [{}]
       product_name = products[0].get("product_name", "N/A")
       reactions = item.get("reactions", [])
       reaction_text = ", ".join(reactions)
+      patient = item.get("patient") or {}
+      gender = patient.get("gender", "N/A")
+      age = patient.get("age", "N/A")
 
       results.append({
           "Cosmetic": product_name,
           "Reactions": reaction_text,
+          "Patient Age": age,
+          "Patient Gender": gender,
           "Report date": item.get("event_date", "N/A")
       })
 
+    if include_more:
+        return results, has_more
     return results
 
 def select_cosmetics(cosmetic_item, summarize=True):
 
+    cosmetic_item["Type"] = "cosmetic"
+
     cosmetic_stats = pd.DataFrame([cosmetic_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
-
-        connection.execute(db.text
-                           ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
-                           {"cosmetic": cosmetic_item["Cosmetic"]})
-        connection.commit()
+            connection.execute(db.text
+                            ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
+                            {"cosmetic": cosmetic_item["Cosmetic"]})
+            connection.commit()
+    except:
+        pass
 
     cosmetic_stats.to_sql('cosmetic_status', con=engine,
                            if_exists='append', index=False)
@@ -155,23 +187,56 @@ def select_cosmetics(cosmetic_item, summarize=True):
 
 
 def show_db():
+    rows = []
+    tables = ["food_status", "drug_status", "cosmetic_status"]
     with engine.connect() as connection:
-        query_result = connection.execute(
-            db.text("SELECT rowid, * FROM food_status")).fetchall()
-    for row in query_result:
-        print(f"\nROW ID: {row[0]}")
-        print(f"Food: {row[1]}")
-        print(f"Reason for recall: {row[2]}")
-        print(f"Recall date: {row[3]}")
-        print(f"Status: {row[4]}")
+        for table in tables:
+            try:
+                query_result = connection.execute(
+                    db.text(f"SELECT rowid, * FROM {table}")).fetchall()
+                for row in query_result:
+                    item = dict(row._mapping)
+                    item["table"] = table
+                    if table == "food_status":
+                        item["Type"] = "food"
+                    elif table == "drug_status":
+                        item["Type"] = "drug"
+                    elif table == "cosmetic_status":
+                        item["Type"] = "cosmetic"
+                    rows.append(item)
+            except:
+                pass
+    if not rows:
+        return None
+    return rows
 
 
-def delete_food(row_num):
+def delete_saved(table, row_num):
+    if table not in ["food_status", "drug_status", "cosmetic_status"]:
+        return
+
     with engine.connect() as connection:
         connection.execute(
-            db.text("DELETE FROM food_status WHERE rowid = :row"),
+            db.text(f"DELETE FROM {table} WHERE rowid = :row"),
             {"row": row_num})
         connection.commit()
+
+
+#alternative function 
+def suggest_alternatives(kind, name, reason):
+  #prompt for gemini, modify it here
+  prompt = f"""
+  Suggest exactly 3 safer alternatives for this recalled or problematic {kind}.
+  Keep each alternative short and specific. Use the same kind of product, not random healthy items. USE THE FDA AS A SOURCE. 
+  Product: {name}
+  Problem: {reason}
+  """
+
+  resp = client.models.generate_content(
+      model="gemini-2.5-flash",
+      contents=prompt
+  )
+  return resp.text
 
 
 def summarize_food_and_drug(item):

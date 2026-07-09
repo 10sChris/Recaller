@@ -5,7 +5,11 @@ import git
 from flask_sqlalchemy import SQLAlchemy
 import requests 
 from flask import jsonify 
-from recaller import search_drug, search_cosmetics
+from recaller import search_drug, search_cosmetics, show_db
+from recaller import select_cosmetics, select_drug, select_food
+from recaller import suggest_alternatives
+from recaller import delete_saved
+
 
 
 homeText = "Welcome to the Food Recall App where you can find out different info regarding Food, Drugs and Cosmetics."
@@ -48,6 +52,18 @@ def drugs():
 def cosmetics():
     return render_template('cosmetics.html', subtitle='Cosmetics Page', text='This is the cosmetics page')
 
+@app.route("/cart")
+def cart():
+    items = show_db()
+    return render_template('cart.html', subtitle='Shopping Cart',text='This is your shopping cart', items=items)
+
+@app.route("/cart/remove", methods=["POST"])
+def remove_cart_item():
+    table = request.form.get("table")
+    row_id = request.form.get("row_id", type=int)
+    delete_saved(table, row_id)
+    return redirect(url_for("cart"))
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -62,23 +78,27 @@ def register():
 FOOD_URL = "https://api.fda.gov/food/enforcement.json"
 
 #Helper function
-def search_food_recalls(query, limit=5):
+def search_food_recalls(query, limit=10, offset=0):
     resp = requests.get(FOOD_URL, 
     params={
         "search": f'product_description:"{query}"', 
-        "limit": limit 
+        "limit": limit + 1,
+        "skip": offset
     },
     timeout=8)
 
     if resp.status_code == 404:
-        return []
+        return [], False
     
     resp.raise_for_status()
     data = resp.json()
 
     res = []
 
-    for item in data.get("results", []):
+    items = data.get("results", [])
+    has_more = len(items) > limit
+
+    for item in items[:limit]:
         res.append({
             "food": item.get("product_description", "N/A"),
             "company": item.get("recalling_firm", "N/A"), 
@@ -86,51 +106,99 @@ def search_food_recalls(query, limit=5):
             "date": item.get("recall_initiation_date", "N/A"),
             "status": item.get("status", "N/A") 
         })
-    return res 
+    return res, has_more 
 
 @app.route("/api/food/search")
 def food_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
     
 
     try:
-        res = search_food_recalls(query)
+        res, has_more = search_food_recalls(query, offset=offset)
     except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
-    return jsonify({"results": res})
+    return jsonify({"results": res, "has_more": has_more})
 
 
 @app.route("/api/drug/search")
 def drug_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
 
     try:
-        res = search_drug(query)
+        res, has_more = search_drug(query, limit=10, offset=offset, include_more=True)
     except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
-    return jsonify({"results": res})
+    return jsonify({"results": res, "has_more": has_more})
 
 @app.route("/api/cosmetic/search")
-def cosmetics_search_api():
+def cosmetic_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
+    
+    try:
+        res, has_more = search_cosmetics(query, limit=10, offset=offset, include_more=True)
+    except requests.RequestException:
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
+    
+    return jsonify({"results": res, "has_more": has_more})
+
+@app.route("/api/alternatives", methods=["POST"])
+def alternatives_api():
+    item = request.json or {}
+    kind = item.get("kind", "product")
+    name = item.get("name", "").strip()
+    reason = item.get("reason", "").strip()
+
+    if not name:
+        return jsonify({"error": "Missing product name"}), 400
 
     try:
-        res = search_cosmetics(query)
-    except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
-    
-    return jsonify({"results": res})
+        alternatives = suggest_alternatives(kind, name, reason)
+    except Exception:
+        return jsonify({"error": "Could not load alternatives"}), 500
+
+    return jsonify({"alternatives": alternatives})
+
+@app.route("/api/food-to-cart", methods=['POST'])
+def food_to_cart():
+   item = request.json
+   select_food(item, summarize=False)
+   return jsonify({"saved": True})
+
+@app.route("/api/drug-to-cart", methods=['POST'])
+def drug_to_cart():
+   item = request.json
+   select_drug(item, summarize=False)
+   return jsonify({"saved": True})
+
+@app.route("/api/cosmetic-to-cart", methods=['POST'])
+def cosmetic_to_cart():
+   item = request.json
+   select_cosmetics(item, summarize=False)
+   return jsonify({"saved": True})
+
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
