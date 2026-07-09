@@ -67,23 +67,27 @@ def register():
 FOOD_URL = "https://api.fda.gov/food/enforcement.json"
 
 #Helper function
-def search_food_recalls(query, limit=5):
+def search_food_recalls(query, limit=10, offset=0):
     resp = requests.get(FOOD_URL, 
     params={
         "search": f'product_description:"{query}"', 
-        "limit": limit 
+        "limit": limit + 1,
+        "skip": offset
     },
     timeout=8)
 
     if resp.status_code == 404:
-        return []
+        return [], False
     
     resp.raise_for_status()
     data = resp.json()
 
     res = []
 
-    for item in data.get("results", []):
+    items = data.get("results", [])
+    has_more = len(items) > limit
+
+    for item in items[:limit]:
         res.append({
             "food": item.get("product_description", "N/A"),
             "company": item.get("recalling_firm", "N/A"), 
@@ -91,51 +95,63 @@ def search_food_recalls(query, limit=5):
             "date": item.get("recall_initiation_date", "N/A"),
             "status": item.get("status", "N/A") 
         })
-    return res 
+    return res, has_more 
 
 @app.route("/api/food/search")
 def food_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
     
 
     try:
-        res = search_food_recalls(query)
+        res, has_more = search_food_recalls(query, offset=offset)
     except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
-    return jsonify({"results": res})
+    return jsonify({"results": res, "has_more": has_more})
 
 
 @app.route("/api/drug/search")
 def drug_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
 
     try:
-        res = search_drug(query)
+        res, has_more = search_drug(query, limit=10, offset=offset, include_more=True)
     except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
-    return jsonify({"results": res})
+    return jsonify({"results": res, "has_more": has_more})
 
 @app.route("/api/cosmetic/search")
 def cosmetic_search_api():
     query = request.args.get("q", "").strip()
+    offset = request.args.get("offset", 0, type=int)
+
+    if offset < 0:
+        offset = 0
 
     if not query:
-        return jsonify({"results": []})
+        return jsonify({"results": [], "has_more": False})
     
     try:
-        res = search_cosmetics(query)
+        res, has_more = search_cosmetics(query, limit=10, offset=offset, include_more=True)
     except requests.RequestException:
-        return jsonify({"error": "Could not reach FDA API", "results": []}), 500
+        return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
-    return jsonify({"results": res})
+    return jsonify({"results": res, "has_more": has_more})
 
 @app.route("/api/food-to-cart", methods=['POST'])
 def food_to_cart():

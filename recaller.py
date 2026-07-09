@@ -66,24 +66,28 @@ def select_food(food_item, summarize=True):
         summary = summarize_food_and_drug(food_item)
         print(summary)
 
-def search_drug(drug):
+def search_drug(drug, limit=5, offset=0, include_more=False):
     
 
     response = requests.get(drugurl,
                             params={"search":
                                     f"product_description:{drug}",
-                                    "limit": 5})
+                                    "limit": limit + 1,
+                                    "skip": offset})
 
     drug_status = response.json()
 
     if "results" not in drug_status:
+        if include_more:
+            return [], False
         return []
 
     items = drug_status["results"]
+    has_more = len(items) > limit
 
     results = []
 
-    for item in items:
+    for item in items[:limit]:
       results.append({
           "Drug": item.get("product_description", "N/A"),
           "Company": item.get("recalling_firm", "N/A"),
@@ -92,6 +96,8 @@ def search_drug(drug):
           "Status": item.get("status", "N/A")
       })
 
+    if include_more:
+        return results, has_more
     return results
 
 def select_drug(drug_item, summarize=True):
@@ -118,28 +124,32 @@ def select_drug(drug_item, summarize=True):
         summary = summarize_food_and_drug(drug_item)
         print(summary)
 
-def search_cosmetics(cosmetic):
+def search_cosmetics(cosmetic, limit=5, offset=0, include_more=False):
 
     response = requests.get(cosmeticurl,
                             params={"search":
                                     f"products.product_name:{cosmetic}",
-                                    "limit": 5})
+                                    "limit": limit + 1,
+                                    "skip": offset})
 
     cosmetic_status = response.json()
 
     if "results" not in cosmetic_status:
+        if include_more:
+            return [], False
         return []
 
     items = cosmetic_status["results"]
+    has_more = len(items) > limit
 
     results = []
 
-    for item in items:
-      products = item.get("products", [{}])
+    for item in items[:limit]:
+      products = item.get("products") or [{}]
       product_name = products[0].get("product_name", "N/A")
       reactions = item.get("reactions", [])
       reaction_text = ", ".join(reactions)
-      patient = item.get("patient")
+      patient = item.get("patient") or {}
       gender = patient.get("gender", "N/A")
       age = patient.get("age", "N/A")
 
@@ -151,6 +161,8 @@ def search_cosmetics(cosmetic):
           "Report date": item.get("event_date", "N/A")
       })
 
+    if include_more:
+        return results, has_more
     return results
 
 def select_cosmetics(cosmetic_item, summarize=True):

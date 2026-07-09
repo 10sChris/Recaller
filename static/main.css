@@ -242,25 +242,7 @@ body {
     margin-top: 20px;
   }
 
-  .food-card .status-bad{
-    background-color: #FCEBEB;
-    color: #791F1F;
-    padding: 2px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    max-width: fit-content;
-  }
-
-  .food-card .status-okay{
-    background-color: #FAEEDA;
-    color: #633806;
-    padding: 2px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    max-width: fit-content;
-  }
-
-
+  .food-card .status-bad,
   .drug-card .status-bad{
     background-color: #FCEBEB;
     color: #791F1F;
@@ -270,13 +252,45 @@ body {
     max-width: fit-content;
   }
 
+  .food-card .status-okay,
   .drug-card .status-okay{
+    background-color: #E7F6EC;
+    color: #14532D;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    max-width: fit-content;
+  }
+
+  .food-card .status-warning,
+  .drug-card .status-warning{
     background-color: #FAEEDA;
     color: #633806;
     padding: 2px 10px;
     border-radius: 6px;
     font-size: 13px;
     max-width: fit-content;
+  }
+
+  .load-more-button {
+    display: block;
+    margin: 24px auto 0;
+    border: none;
+    border-radius: 6px;
+    background: #075985;
+    color: white;
+    font-weight: 700;
+    padding: 12px 22px;
+    cursor: pointer;
+  }
+
+  .load-more-button:hover {
+    background: #0369a1;
+  }
+
+  .load-more-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
   }
 
 
