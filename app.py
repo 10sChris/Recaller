@@ -123,7 +123,7 @@ def drug_search_api():
     
     return jsonify({"results": res})
 
-@app.route("/api/cosmetics/search")
+@app.route("/api/cosmetic/search")
 def cosmetic_search_api():
     query = request.args.get("q", "").strip()
 

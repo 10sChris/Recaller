@@ -13,6 +13,18 @@ const cosmeticsResultsContainer = document.querySelector('.cosmetics-page .resul
 const foodRecommenderContainer = document.querySelector('.food-page .popular-foods')
 const foodRecommendOption = document.querySelector('.food-page .access-button')
 
+
+const drugsRecommnderContainer = document.querySelector('.drugs-page .popular-drugs')
+const drugsRecommendOption = document.querySelector('.drugs-page .access-button')
+
+if(drugsRecommnderContainer && drugsRecommendOption){
+    drugsRecommendOption.addEventListener('click', function(event){
+        event.preventDefault()
+        drugsRecommnderContainer.classList.add('visible')
+    })
+}
+
+
 if(foodRecommendOption && foodRecommenderContainer){
     foodRecommendOption.addEventListener('click', function(event){
         event.preventDefault()
@@ -148,7 +160,6 @@ if (drugSearchInput && drugResultsContainer) {
 }
 
 
-
 if (cosmeticsSearchInput && cosmeticsResultsContainer) {
     let timer; 
 
@@ -193,6 +204,8 @@ if (cosmeticsSearchInput && cosmeticsResultsContainer) {
                 <p><strong>Cosmetic:</strong> ${item["Cosmetic"]}</p>
                 <p><strong>Reactions:</strong> ${item["Reactions"]}</p>
                 <p><strong>Report Date: </strong>${item["Report date"]}</p>
+                <p><strong> Patient Age: </strong>${item["Patient Age"]}</p>
+                <p><strong> Patient Gender: </strong>${item["Patient Gender"]}</p>
                 `; 
                 cosmeticsResultsContainer.appendChild(card);
             });
