@@ -31,6 +31,12 @@ body {
     letter-spacing: .3px;
   }
 
+  .navbar-brand i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+    vertical-align: middle;
+  }
+
   .navbar-nav .nav-link i {
     margin-right: 10px;
     font-size: 1rem;
