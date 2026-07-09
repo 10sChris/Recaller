@@ -5,6 +5,8 @@ const searchStatus = document.querySelector('.food-page .search-status');
 const drugSearchStatus = document.querySelector('.drugs-page .search-status');
 const drugSearchInput = document.querySelector('.drugs-page .search-input');
 const drugResultsContainer = document.querySelector('.drugs-page .results-container');
+const drugRecommenderContainer = document.querySelector('.drugs-page .popular-drugs')
+const drugRecommendOption = document.querySelector('.drugs-page .access-button')
 
 const cosmeticsSearchStatus = document.querySelector('.cosmetics-page .search-status');
 const cosmeticsSearchInput = document.querySelector('.cosmetics-page .search-input');
