@@ -293,6 +293,31 @@ body {
     opacity: 0.65;
   }
 
+  .alternative-button {
+    border: none;
+    border-radius: 6px;
+    background: #14532D;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .alternative-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .alternative-result {
+    background: #E7F6EC;
+    border-left: 4px solid #14532D;
+    border-radius: 6px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    white-space: pre-line;
+  }
+
 
   .cosmetics-page .popular-cosmetics{
     opacity: 0;

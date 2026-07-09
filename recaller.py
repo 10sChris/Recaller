@@ -208,6 +208,23 @@ def delete_food(row_num):
         connection.commit()
 
 
+#alternative function 
+def suggest_alternatives(kind, name, reason):
+  #prompt for gemini, modify it here
+  prompt = f"""
+  Suggest exactly 3 safer alternatives for this recalled or problematic {kind}.
+  Keep each alternative short and specific. Use the same kind of product, not random healthy items. USE THE FDA AS A SOURCE. 
+  Product: {name}
+  Problem: {reason}
+  """
+
+  resp = client.models.generate_content(
+      model="gemini-2.5-flash",
+      contents=prompt
+  )
+  return resp.text
+
+
 def summarize_food_and_drug(item):
   prompt = f"""
   Explain this food recall straightforward in a sentence or two. 

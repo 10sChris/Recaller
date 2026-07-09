@@ -5,6 +5,7 @@ flask_behind_proxy==0.1.1
 flask_sqlalchemy==3.0.5
 Flask-WTF==1.1.1
 GitPython==3.1.31
+google-genai==2.10.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.3

@@ -45,6 +45,36 @@ if(foodRecommendOption && foodRecommenderContainer){
     })
 }
 
+//function to load alternatives
+async function loadAlternatives(button, resultBox, payload) {
+    button.disabled = true;
+    resultBox.hidden = false;
+    resultBox.textContent = 'Loading alternatives..';
+
+    const resp = await fetch('/api/alternatives', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+
+    if (data.error) {
+        resultBox.textContent = data.error;
+    } else {
+        resultBox.textContent = data.alternatives;
+    }
+
+    button.disabled = false;
+}
+
+function formatRecallDate(value) {
+    if (!value || value === 'N/A' || value.length !== 8) {
+        return value;
+    }
+
+    return `${value.slice(4, 6)}/${value.slice(6, 8)}/${value.slice(0, 4)}`;
+}
+
 if (searchInput && resultsContainer) {
     let timer; 
     let offset = 0;
@@ -60,7 +90,7 @@ if (searchInput && resultsContainer) {
                 <h3>${item.food}</h3>
                 <p><strong>Company:</strong> ${item.company}</p>
                 <p><strong>Reason:</strong> ${item.reason}</p>
-                <p><strong>Recall date: </strong>${item.date}</p>
+                <p><strong>Recall date: </strong>${formatRecallDate(item.date)}</p>
                 <p class="status-okay">${item.status}</p>
                 `; 
 
@@ -69,10 +99,25 @@ if (searchInput && resultsContainer) {
                 <h3>${item.food}</h3>
                 <p><strong>Company:</strong> ${item.company}</p>
                 <p><strong>Reason:</strong> ${item.reason}</p>
-                <p><strong>Recall date: </strong>${item.date}</p>
+                <p><strong>Recall date: </strong>${formatRecallDate(item.date)}</p>
                 <p class="status-bad">${item.status}</p>
             `; 
             }
+            const button = document.createElement('button');
+            const resultBox = document.createElement('div');
+            button.className = 'alternative-button';
+            button.textContent = 'Alternatives';
+            resultBox.className = 'alternative-result';
+            resultBox.hidden = true;
+            button.addEventListener('click', function () {
+                loadAlternatives(button, resultBox, {
+                    kind: 'food',
+                    name: item.food,
+                    reason: item.reason
+                });
+            });
+            card.appendChild(button);
+            card.appendChild(resultBox);
             resultsContainer.appendChild(card);
         });
     }
@@ -168,7 +213,7 @@ if (drugSearchInput && drugResultsContainer) {
                 <h3>${item.Drug}</h3>
                 <p><strong>Company:</strong> ${item["Company"]}</p>
                 <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
-                <p><strong>Recall date: </strong>${item["Recall date"]}</p>
+                <p><strong>Recall date: </strong>${formatRecallDate(item["Recall date"])}</p>
                 <p class="status-okay"><strong>${item["Status"]}</strong></p>
                 `; 
             } else if(item["Status"] === "Ongoing"){
@@ -176,11 +221,26 @@ if (drugSearchInput && drugResultsContainer) {
                 <h3>${item.Drug}</h3>
                 <p><strong>Company:</strong> ${item["Company"]}</p>
                 <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
-                <p><strong>Recall date: </strong>${item["Recall date"]}</p>
+                <p><strong>Recall date: </strong>${formatRecallDate(item["Recall date"])}</p>
                 <p class="status-bad"><strong>${item["Status"]}</strong></p>
                 `;
             }
 
+            const button = document.createElement('button');
+            const resultBox = document.createElement('div');
+            button.className = 'alternative-button';
+            button.textContent = 'Alternatives';
+            resultBox.className = 'alternative-result';
+            resultBox.hidden = true;
+            button.addEventListener('click', function () {
+                loadAlternatives(button, resultBox, {
+                    kind: 'drug',
+                    name: item.Drug,
+                    reason: item["Reason for recall"]
+                });
+            });
+            card.appendChild(button);
+            card.appendChild(resultBox);
             drugResultsContainer.appendChild(card);
         });
     }
@@ -278,6 +338,21 @@ if (cosmeticsSearchInput && cosmeticsResultsContainer) {
             <p><strong> Patient Age: </strong>${item["Patient Age"]}</p>
             <p><strong> Patient Gender: </strong>${item["Patient Gender"]}</p>
             `; 
+            const button = document.createElement('button');
+            const resultBox = document.createElement('div');
+            button.className = 'alternative-button';
+            button.textContent = 'Alternatives';
+            resultBox.className = 'alternative-result';
+            resultBox.hidden = true;
+            button.addEventListener('click', function () {
+                loadAlternatives(button, resultBox, {
+                    kind: 'cosmetic',
+                    name: item.Cosmetic,
+                    reason: item.Reactions
+                });
+            });
+            card.appendChild(button);
+            card.appendChild(resultBox);
             cosmeticsResultsContainer.appendChild(card);
         });
     }

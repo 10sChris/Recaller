@@ -7,6 +7,7 @@ import requests
 from flask import jsonify 
 from recaller import search_drug, search_cosmetics, show_db
 from recaller import select_cosmetics, select_drug, select_food
+from recaller import suggest_alternatives
 
 
 
@@ -152,6 +153,23 @@ def cosmetic_search_api():
         return jsonify({"error": "Could not reach FDA API", "results": [], "has_more": False}), 500
     
     return jsonify({"results": res, "has_more": has_more})
+
+@app.route("/api/alternatives", methods=["POST"])
+def alternatives_api():
+    item = request.json or {}
+    kind = item.get("kind", "product")
+    name = item.get("name", "").strip()
+    reason = item.get("reason", "").strip()
+
+    if not name:
+        return jsonify({"error": "Missing product name"}), 400
+
+    try:
+        alternatives = suggest_alternatives(kind, name, reason)
+    except Exception:
+        return jsonify({"error": "Could not load alternatives"}), 500
+
+    return jsonify({"alternatives": alternatives})
 
 @app.route("/api/food-to-cart", methods=['POST'])
 def food_to_cart():
