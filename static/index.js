@@ -75,6 +75,32 @@ function formatRecallDate(value) {
     return `${value.slice(4, 6)}/${value.slice(6, 8)}/${value.slice(0, 4)}`;
 }
 
+function addCartButton(card, url, item) {
+    const button = document.createElement('button');
+    button.className = 'cart-button';
+    button.type = 'button';
+    button.title = 'Add to saved items';
+    button.setAttribute('aria-label', 'Add to saved items');
+    button.textContent = 'Add';
+    button.addEventListener('click', async function () {
+        button.disabled = true;
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(item)
+        });
+        if (resp.ok) {
+            button.title = 'Saved';
+            button.setAttribute('aria-label', 'Saved');
+            button.textContent = 'Saved';
+        } else {
+            button.textContent = 'Add';
+        }
+        button.disabled = false;
+    });
+    card.appendChild(button);
+}
+
 if (searchInput && resultsContainer) {
     let timer; 
     let offset = 0;
@@ -103,6 +129,12 @@ if (searchInput && resultsContainer) {
                 <p class="status-bad">${item.status}</p>
             `; 
             }
+            addCartButton(card, '/api/food-to-cart', {
+                Food: item.food,
+                "Reason for recall": item.reason,
+                "Recall date": item.date,
+                Status: item.status
+            });
             const button = document.createElement('button');
             const resultBox = document.createElement('div');
             button.className = 'alternative-button';
@@ -226,6 +258,7 @@ if (drugSearchInput && drugResultsContainer) {
                 `;
             }
 
+            addCartButton(card, '/api/drug-to-cart', item);
             const button = document.createElement('button');
             const resultBox = document.createElement('div');
             button.className = 'alternative-button';
@@ -338,6 +371,7 @@ if (cosmeticsSearchInput && cosmeticsResultsContainer) {
             <p><strong> Patient Age: </strong>${item["Patient Age"]}</p>
             <p><strong> Patient Gender: </strong>${item["Patient Gender"]}</p>
             `; 
+            addCartButton(card, '/api/cosmetic-to-cart', item);
             const button = document.createElement('button');
             const resultBox = document.createElement('div');
             button.className = 'alternative-button';

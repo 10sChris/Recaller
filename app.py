@@ -8,6 +8,7 @@ from flask import jsonify
 from recaller import search_drug, search_cosmetics, show_db
 from recaller import select_cosmetics, select_drug, select_food
 from recaller import suggest_alternatives
+from recaller import delete_saved
 
 
 
@@ -53,6 +54,13 @@ def cosmetics():
 def cart():
     items = show_db()
     return render_template('cart.html', subtitle='Shopping Cart',text='This is your shopping cart', items=items)
+
+@app.route("/cart/remove", methods=["POST"])
+def remove_cart_item():
+    table = request.form.get("table")
+    row_id = request.form.get("row_id", type=int)
+    delete_saved(table, row_id)
+    return redirect(url_for("cart"))
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -175,16 +183,19 @@ def alternatives_api():
 def food_to_cart():
    item = request.json
    select_food(item, summarize=False)
+   return jsonify({"saved": True})
 
 @app.route("/api/drug-to-cart", methods=['POST'])
 def drug_to_cart():
    item = request.json
    select_drug(item, summarize=False)
+   return jsonify({"saved": True})
 
 @app.route("/api/cosmetic-to-cart", methods=['POST'])
 def cosmetic_to_cart():
    item = request.json
    select_cosmetics(item, summarize=False)
+   return jsonify({"saved": True})
 
 
 @app.route("/update_server", methods=['POST'])

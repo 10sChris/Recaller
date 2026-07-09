@@ -43,8 +43,6 @@ def search_food(food):
     return results
 
 def select_food(food_item, summarize=True):
-    food_item["Type"] = "food"
-
     food_stats = pd.DataFrame([food_item])
 
     try:
@@ -189,21 +187,37 @@ def select_cosmetics(cosmetic_item, summarize=True):
 
 
 def show_db():
-    with engine.connect() as connection:
-        query_result = connection.execute(
-            db.text("SELECT rowid, * FROM food_status")).fetchall()
-    if not query_result:
-        return None
     rows = []
-    for row in query_result:
-        rows.append(dict(row._mapping))
+    tables = ["food_status", "drug_status", "cosmetic_status"]
+    with engine.connect() as connection:
+        for table in tables:
+            try:
+                query_result = connection.execute(
+                    db.text(f"SELECT rowid, * FROM {table}")).fetchall()
+                for row in query_result:
+                    item = dict(row._mapping)
+                    item["table"] = table
+                    if table == "food_status":
+                        item["Type"] = "food"
+                    elif table == "drug_status":
+                        item["Type"] = "drug"
+                    elif table == "cosmetic_status":
+                        item["Type"] = "cosmetic"
+                    rows.append(item)
+            except:
+                pass
+    if not rows:
+        return None
     return rows
 
 
-def delete_food(row_num):
+def delete_saved(table, row_num):
+    if table not in ["food_status", "drug_status", "cosmetic_status"]:
+        return
+
     with engine.connect() as connection:
         connection.execute(
-            db.text("DELETE FROM food_status WHERE rowid = :row"),
+            db.text(f"DELETE FROM {table} WHERE rowid = :row"),
             {"row": row_num})
         connection.commit()
 

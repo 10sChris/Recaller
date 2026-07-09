@@ -1,29 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="cosmetics-page">
+<div class="cart-page">
     <h2>{{ subtitle }}</h2>
-    <p>WELCOME TO YOUR SHOPPING CART</p>
+    <p>Saved items</p>
 
     {% if items %}
         {% for item in items %}
         <div class="cart-item">
             {% if item.Type == "food" %}
                 <h3>{{ item.Food }}</h3>
+                <p><strong>Company: </strong>{{ item.Company }}</p>
                 <p><strong>Reason for recall: </strong> {{ item["Reason for recall"] }}</p>
                 <p><strong>Recall date: </strong> {{ item["Recall date"] }}</p>
                 <p><strong>Status: </strong> {{ item.Status }}</p>
             {% elif item.Type == "drug" %}
                 <h3>{{ item.Drug }}</h3>
+                <p><strong>Company: </strong>{{ item.Company }}</p>
                 <p><strong>Reason for recall: </strong> {{ item["Reason for recall"] }}</p>
                 <p><strong>Recall date: </strong> {{ item["Recall date"] }}</p>
                 <p><strong>Status: </strong> {{ item.Status }}</p>
             {% elif item.Type == "cosmetic" %}
                 <h3>{{ item.Cosmetic }}</h3>
                 <p><strong>Reactions: </strong> {{ item.Reactions }}</p>
-                <p><strong>Patient age: </strong> {{ item["Patient age"] }}</p>
-                <p><strong>Patient gender: </strong> {{ item["Patient gender"] }}</p>
+                <p><strong>Patient age: </strong> {{ item["Patient Age"] }}</p>
+                <p><strong>Patient gender: </strong> {{ item["Patient Gender"] }}</p>
                 <p><strong>Report date: </strong>{{ item["Report date"] }}</p>
             {% endif %}
+            <form action="{{ url_for('remove_cart_item') }}" method="POST">
+                <input type="hidden" name="table" value="{{ item.table }}">
+                <input type="hidden" name="row_id" value="{{ item.rowid }}">
+                <button class="remove-button" type="submit">Remove</button>
+            </form>
         </div>
         {% endfor %}
     {% else %}
