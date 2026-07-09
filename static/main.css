@@ -421,6 +421,13 @@ body {
     color: white;
   }
 
+  .cosmetics-page .section-title p {
+    color: white;
+  }
+
+  .cosmetics-page .section-title h2 {
+    color: white;
+  }
 
   .cosmetics-page .popular-cosmetics{
     opacity: 0;
