@@ -221,6 +221,7 @@ body {
     padding: 16px;
     color: black;
     border-left-color: #075985;
+    transition: .25s;
   }
   
   .food-page .access-button{
