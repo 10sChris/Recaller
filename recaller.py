@@ -43,16 +43,22 @@ def search_food(food):
     return results
 
 def select_food(food_item, summarize=True):
+    food_item["Type"] = "food"
 
     food_stats = pd.DataFrame([food_item])
 
-    with engine.connect() as connection:
+    try:
+        with engine.connect() as connection:
 
-        connection.execute(db.text
-                            ("DELETE FROM food_status WHERE Food = :food"),
-                            {"food": food_item["Food"]})
-        connection.commit()
+            connection.execute(db.text
+                                ("DELETE FROM food_status WHERE Food = :food"),
+                                {"food": food_item["Food"]})
+            connection.commit()
 
+    except:
+        pass
+
+    
     food_stats.to_sql('food_status', con=engine,
                             if_exists='append', index=False)
 
@@ -61,6 +67,7 @@ def select_food(food_item, summarize=True):
         print(summary)
 
 def search_drug(drug):
+    
 
     response = requests.get(drugurl,
                             params={"search":
@@ -70,7 +77,7 @@ def search_drug(drug):
     drug_status = response.json()
 
     if "results" not in drug_status:
-        return None
+        return []
 
     items = drug_status["results"]
 
@@ -89,14 +96,20 @@ def search_drug(drug):
 
 def select_drug(drug_item, summarize=True):
 
+    drug_item["Type"] = "drug"
+
     drug_stats = pd.DataFrame([drug_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
+            connection.execute(db.text
+                            ("DELETE FROM drug_status WHERE Drug = :drug"),
+                            {"drug": drug_item["Drug"]})
+            connection.commit()
 
-        connection.execute(db.text
-                           ("DELETE FROM drug_status WHERE Drug = :drug"),
-                           {"drug": drug_item["Drug"]})
-        connection.commit()
+    except:
+        pass
+
 
     drug_stats.to_sql('drug_status', con=engine,
                            if_exists='append', index=False)
@@ -115,7 +128,7 @@ def search_cosmetics(cosmetic):
     cosmetic_status = response.json()
 
     if "results" not in cosmetic_status:
-        return None
+        return []
 
     items = cosmetic_status["results"]
 
@@ -126,10 +139,15 @@ def search_cosmetics(cosmetic):
       product_name = products[0].get("product_name", "N/A")
       reactions = item.get("reactions", [])
       reaction_text = ", ".join(reactions)
+      patient = item.get("patient")
+      gender = patient.get("gender", "N/A")
+      age = patient.get("age", "N/A")
 
       results.append({
           "Cosmetic": product_name,
           "Reactions": reaction_text,
+          "Patient Age": age,
+          "Patient Gender": gender,
           "Report date": item.get("event_date", "N/A")
       })
 
@@ -137,14 +155,18 @@ def search_cosmetics(cosmetic):
 
 def select_cosmetics(cosmetic_item, summarize=True):
 
+    cosmetic_item["Type"] = "cosmetic"
+
     cosmetic_stats = pd.DataFrame([cosmetic_item])
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
-
-        connection.execute(db.text
-                           ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
-                           {"cosmetic": cosmetic_item["Cosmetic"]})
-        connection.commit()
+            connection.execute(db.text
+                            ("DELETE FROM cosmetic_status WHERE Cosmetic = :cosmetic"),
+                            {"cosmetic": cosmetic_item["Cosmetic"]})
+            connection.commit()
+    except:
+        pass
 
     cosmetic_stats.to_sql('cosmetic_status', con=engine,
                            if_exists='append', index=False)
@@ -158,12 +180,12 @@ def show_db():
     with engine.connect() as connection:
         query_result = connection.execute(
             db.text("SELECT rowid, * FROM food_status")).fetchall()
+    if not query_result:
+        return None
+    rows = []
     for row in query_result:
-        print(f"\nROW ID: {row[0]}")
-        print(f"Food: {row[1]}")
-        print(f"Reason for recall: {row[2]}")
-        print(f"Recall date: {row[3]}")
-        print(f"Status: {row[4]}")
+        rows.append(dict(row._mapping))
+    return rows
 
 
 def delete_food(row_num):

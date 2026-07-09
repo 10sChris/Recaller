@@ -5,7 +5,9 @@ import git
 from flask_sqlalchemy import SQLAlchemy
 import requests 
 from flask import jsonify 
-from recaller import search_drug, search_cosmetics
+from recaller import search_drug, search_cosmetics, show_db
+from recaller import select_cosmetics, select_drug, select_food
+
 
 
 app = Flask(__name__)
@@ -45,6 +47,11 @@ def drugs():
 @app.route("/cosmetics")
 def cosmetics():
     return render_template('cosmetics.html', subtitle='Cosmetics Page', text='This is the cosmetics page')
+
+@app.route("/cart")
+def cart():
+    items = show_db()
+    return render_template('cart.html', subtitle='Shopping Cart',text='This is your shopping cart', items=items)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -116,19 +123,35 @@ def drug_search_api():
     
     return jsonify({"results": res})
 
-@app.route("/api/cosmetic/search")
-def cosmetics_search_api():
+@app.route("/api/cosmetics/search")
+def cosmetic_search_api():
     query = request.args.get("q", "").strip()
 
     if not query:
         return jsonify({"results": []})
-
+    
     try:
         res = search_cosmetics(query)
     except requests.RequestException:
         return jsonify({"error": "Could not reach FDA API", "results": []}), 500
     
     return jsonify({"results": res})
+
+@app.route("/api/food-to-cart", methods=['POST'])
+def food_to_cart():
+   item = request.json
+   select_food(item, summarize=False)
+
+@app.route("/api/drug-to-cart", methods=['POST'])
+def drug_to_cart():
+   item = request.json
+   select_drug(item, summarize=False)
+
+@app.route("/api/cosmetic-to-cart", methods=['POST'])
+def cosmetic_to_cart():
+   item = request.json
+   select_cosmetics(item, summarize=False)
+
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
