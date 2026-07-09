@@ -22,6 +22,13 @@ if(foodRecommendOption && foodRecommenderContainer){
     })
 }
 
+if(drugRecommendOption && drugRecommenderContainer){
+    drugRecommendOption.addEventListener('click', function(event){
+        event.preventDefault()
+        drugRecommenderContainer.classList.add('visible')
+    })
+}
+
 if (searchInput && resultsContainer) {
     let timer; 
 
