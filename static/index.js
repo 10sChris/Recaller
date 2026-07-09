@@ -13,9 +13,19 @@ const cosmeticsResultsContainer = document.querySelector('.cosmetics-page .resul
 const foodRecommenderContainer = document.querySelector('.food-page .popular-foods')
 const foodRecommendOption = document.querySelector('.food-page .access-button')
 
-
 const drugsRecommnderContainer = document.querySelector('.drugs-page .popular-drugs')
 const drugsRecommendOption = document.querySelector('.drugs-page .access-button')
+
+const cosmeticRecommenderContainer = document.querySelector('.cosmetics-page  .popular-cosmetics')
+const cosmeticRecommendOption = document.querySelector('.cosmetics-page .access-button')
+
+
+if(cosmeticRecommenderContainer && cosmeticRecommendOption){
+    cosmeticRecommendOption.addEventListener('click', function(event){
+        event.preventDefault()
+        cosmeticRecommenderContainer.classList.add('visible')
+    })
+}
 
 if(drugsRecommnderContainer && drugsRecommendOption){
     drugsRecommendOption.addEventListener('click', function(event){
@@ -138,7 +148,7 @@ if (drugSearchInput && drugResultsContainer) {
                     <p><strong>Company:</strong> ${item["Company"]}</p>
                     <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
                     <p><strong>Recall date: </strong>${item["Recall date"]}</p>
-                    <p class="status-bad"><strong>${item["Status"]}</p>
+                    <p class="status-bad"><strong>${item["Status"]}</strong></p>
                     `; 
                 } else if(item["Status"] === "Ongoing"){
                     card.innerHTML = `
@@ -146,7 +156,7 @@ if (drugSearchInput && drugResultsContainer) {
                     <p><strong>Company:</strong> ${item["Company"]}</p>
                     <p><strong>Reason:</strong> ${item["Reason for recall"]}</p>
                     <p><strong>Recall date: </strong>${item["Recall date"]}</p>
-                    <p class="status-okay">${item["Status"]}</p>
+                    <p class="status-okay"><strong>${item["Status"]}</strong></p>
                     `;
                 }
 
@@ -198,7 +208,6 @@ if (cosmeticsSearchInput && cosmeticsResultsContainer) {
             data.results.forEach(function (item) {
                 const card = document.createElement('div');
                 card.className = 'cosmetics-card'
-
                 card.innerHTML = `
                 <h3>${item.Cosmetic}</h3>
                 <p><strong>Cosmetic:</strong> ${item["Cosmetic"]}</p>
