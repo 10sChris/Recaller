@@ -57,6 +57,14 @@ body {
     margin-top: -24px;
   }
 
+  .drugs-page .section-title p {
+    color: white;
+  }
+
+  .drugs-page .section-title h2 {
+    color: white;
+  }
+
   .drugs-page .hero {
     position: relative;
     min-height: 620px;
