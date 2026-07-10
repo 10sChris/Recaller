@@ -12,6 +12,7 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 - 📋 **Recall details** — view the specific reason each item was recalled
 - 🤖 **AI-powered alternatives** — Gemini API suggests safer alternative products based on recall results
 - 🌐 **Web-based interface** — built with Flask and server-rendered templates for a fast, simple experience
+- **Databse** - Database built with SQL to save items of interest on carts page
 
 ## Tech Stack
 
@@ -63,6 +64,7 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 2. The app queries the openFDA API and returns any matching recall records, including the recall reason.
 3. If a recall is found, the Gemini API is used to generate suggestions for safer alternative products.
 4. Results are rendered back to the user through the Flask/Jinja2 templates.
+5. Users can add different items to cart through database feature. 
 
 ## Deployment
 
@@ -74,13 +76,6 @@ This app is deployed on [PythonAnywhere](https://www.pythonanywhere.com/). Live 
 - Haithem Salmi
 - Christopher Hernandez
 - Laali Nembot
-
-## Roadmap
-
-- [ ] Add screenshots/demo of the app
-- [ ] Expand alternative-product suggestions with more product metadata
-- [ ] Improve search with fuzzy matching / autocomplete
-- [ ] Add unit tests for Flask routes
 
 ## License
 
