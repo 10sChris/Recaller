@@ -12,7 +12,7 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 - 📋 **Recall details** — view the specific reason each item was recalled
 - 🤖 **AI-powered alternatives** — Gemini API suggests safer alternative products based on recall results
 - 🌐 **Web-based interface** — built with Flask and server-rendered templates for a fast, simple experience
-- **Database** - Database built with SQL to save items of interest on carts page
+- 🗄️ **Database** - Database built with SQL to save items of interest 
 
 ## Tech Stack
 
@@ -35,28 +35,31 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 ### Installation
 
 1. Clone the repository
-   \`\`\`bash
+   ```bash
    git clone https://github.com/your-username/fda-recaller.git
-   cd fda-recaller
-   \`\`\`
+   cd Recaller
+   
 
-2. (Optional but recommended) Create and activate a virtual environment
-   \`\`\`bash
+2. Create and activate a virtual environment
+   ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   \`\`\`
+   source venv/bin/activate
+   # On Windows:
+   ```bash
+   venv\Scripts\activate
+   
 
 3. Install dependencies
-   \`\`\`bash
+   ```bash
    pip install -r requirements.txt
-   \`\`\`
+  
 
 4. Run the app
-   \`\`\`bash
-   flask run
-   \`\`\`
+   ```bash
+   python app.py
+  
 
-5. Open your browser to \`http://127.0.0.1:5000\`
+5. Open your browser to port given port address
 
 ## How It Works
 
@@ -64,11 +67,11 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 2. The app queries the openFDA API and returns any matching recall records, including the recall reason.
 3. If a recall is found, the Gemini API is used to generate suggestions for safer alternative products.
 4. Results are rendered back to the user through the Flask/Jinja2 templates.
-5. Users can add different items to cart through database feature. 
+5. Each result rendered is a card where users have the option to find alternatives or add to their "lookout" cart.
 
 ## Deployment
 
-This app is deployed on [PythonAnywhere](https://www.pythonanywhere.com/). Live demo link: *add your PythonAnywhere URL here*
+This app is deployed on [PythonAnywhere](https://www.pythonanywhere.com/). Live demo link: https://recaller.pythonanywhere.com/
 
 ## Contributors
 
