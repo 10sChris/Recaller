@@ -12,7 +12,7 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 - 📋 **Recall details** — view the specific reason each item was recalled
 - 🤖 **AI-powered alternatives** — Gemini API suggests safer alternative products based on recall results
 - 🌐 **Web-based interface** — built with Flask and server-rendered templates for a fast, simple experience
-- **Databse** - Database built with SQL to save items of interest on carts page
+- **Database** - Database built with SQL to save items of interest on carts page
 
 ## Tech Stack
 
