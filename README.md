@@ -4,7 +4,8 @@ A Flask web application that lets users search FDA recall data across food, drug
 
 ## Overview
 
-Product recalls are hard to track and even harder to act on. FDA Recaller pulls live recall data from the openFDA API so users can quickly search for a food, drug, or cosmetic item, see exactly why it was recalled, and get AI-generated suggestions for safer alternatives via the Gemini API.
+Product recalls are hard to track and even harder to act on. FDA Recaller pulls live recall data from the openFDA API so users can quickly search for a food, drug, or cosmetic item, see exactly why it was recalled, and get AI-generated suggestions for safer alternatives via the Gemini API. Recaller allows users to find these items, and keep track of them,
+getting notified when things may end up changing later on. 
 
 ## Features
 
@@ -12,7 +13,7 @@ Product recalls are hard to track and even harder to act on. FDA Recaller pulls 
 - 📋 **Recall details** — view the specific reason each item was recalled
 - 🤖 **AI-powered alternatives** — Gemini API suggests safer alternative products based on recall results
 - 🌐 **Web-based interface** — built with Flask and server-rendered templates for a fast, simple experience
-- 🗄️ **Database** - Database built with SQL to save items of interest 
+- 🗄️ **Database** - Database built with sqlite to save items of interest 
 
 ## Tech Stack
 
